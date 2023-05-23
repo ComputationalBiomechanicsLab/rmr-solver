@@ -1,0 +1,6 @@
+# ignore all logs
+*.log
+
+# ignore all Matlab autosaved files
+*.asv
+Personal_Results/*

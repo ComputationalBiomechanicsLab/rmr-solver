@@ -1,0 +1,56 @@
+>> batch_CMC_all 3Hz case
+Loading file.....\IK\output\abd01_IK.mot
+CMC for abd01 took 4191.1194s for 10.9s.
+A compution to real-time ratio of: 384.5064
+Loading file.....\IK\output\abd02_IK.mot
+CMC for abd02 took 3273.8821s for 8.45s.
+A compution to real-time ratio of: 387.4417
+Loading file.....\IK\output\abd03_IK.mot
+CMC for abd03 took 3002.668s for 7.86s.
+A compution to real-time ratio of: 382.0188
+Loading file.....\IK\output\flx01_IK.mot
+CMC for flx01 took 3248.6072s for 7.93s.
+A compution to real-time ratio of: 409.6604
+Loading file.....\IK\output\flx02_IK.mot
+CMC for flx02 took 3470.9886s for 8.47s.
+A compution to real-time ratio of: 409.798
+Loading file.....\IK\output\flx03_IK.mot
+CMC for flx03 took 3378.1765s for 8.34s.
+A compution to real-time ratio of: 405.0571
+Loading file.....\IK\output\shrug01_IK.mot
+CMC for shrug01 took 1751.1061s for 4.61s.
+A compution to real-time ratio of: 379.8495
+Loading file.....\IK\output\shrug02_IK.mot
+CMC for shrug02 took 1677.8626s for 4.43s.
+A compution to real-time ratio of: 378.75
+Loading file.....\IK\output\shrug03_IK.mot
+CMC for shrug03 took 1852.1742s for 4.97s.
+A compution to real-time ratio of: 372.6709
+Loading file.....\IK\output\abd21_IK.mot
+CMC for abd21 took 2943.7665s for 7.71s.
+A compution to real-time ratio of: 381.8115
+Loading file.....\IK\output\abd22_IK.mot
+CMC for abd22 took 3178.6771s for 8.28s.
+A compution to real-time ratio of: 383.8982
+Loading file.....\IK\output\abd23_IK.mot
+CMC for abd23 took 3651.0249s for 9.37s.
+A compution to real-time ratio of: 389.6505
+Loading file.....\IK\output\flx21_IK.mot
+CMC for flx21 took 2866.8123s for 7.08s.
+A compution to real-time ratio of: 404.917
+Loading file.....\IK\output\flx22_IK.mot
+CMC for flx22 took 3320.2114s for 8.2s.
+A compution to real-time ratio of: 404.9038
+Loading file.....\IK\output\flx23_IK.mot
+CMC for flx23 took 3057.4845s for 7.73s.
+A compution to real-time ratio of: 395.5349
+Loading file.....\IK\output\shrug21_IK.mot
+CMC for shrug21 took 1716.7823s for 4.32s.
+A compution to real-time ratio of: 397.4033
+Loading file.....\IK\output\shrug22_IK.mot
+CMC for shrug22 took 1968.5692s for 4.79s.
+A compution to real-time ratio of: 410.9748
+Loading file.....\IK\output\shrug23_IK.mot
+CMC for shrug23 took 2248.2383s for 5.55s.
+A compution to real-time ratio of: 405.088
+>> 

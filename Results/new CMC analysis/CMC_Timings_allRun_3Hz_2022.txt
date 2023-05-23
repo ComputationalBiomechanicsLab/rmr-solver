@@ -1,0 +1,55 @@
+>> batch_CMC_2022
+Loading file.....\new IK solutions\abd01.mot
+CMC for abd01 took 2121.2084s for 10.9s.
+A compution to real-time ratio of: 194.6063
+Loading file.....\new IK solutions\abd02.mot
+CMC for abd02 took 1965.0018s for 8.45s.
+A compution to real-time ratio of: 232.5446
+Loading file.....\new IK solutions\abd03.mot
+CMC for abd03 took 1936.027s for 7.86s.
+A compution to real-time ratio of: 246.3139
+Loading file.....\new IK solutions\flx01.mot
+CMC for flx01 took 2198.9292s for 7.93s.
+A compution to real-time ratio of: 277.2925
+Loading file.....\new IK solutions\flx02.mot
+CMC for flx02 took 2411.3916s for 8.47s.
+A compution to real-time ratio of: 284.698
+Loading file.....\new IK solutions\flx03.mot
+CMC for flx03 took 2275.9849s for 8.34s.
+A compution to real-time ratio of: 272.8999
+Loading file.....\new IK solutions\shrug01.mot
+CMC for shrug01 took 963.9047s for 4.61s.
+A compution to real-time ratio of: 209.09
+Loading file.....\new IK solutions\shrug02.mot
+CMC for shrug02 took 810.5979s for 4.43s.
+A compution to real-time ratio of: 182.9792
+Loading file.....\new IK solutions\shrug03.mot
+CMC for shrug03 took 830.3686s for 4.97s.
+A compution to real-time ratio of: 167.0762
+Loading file.....\new IK solutions\abd21.mot
+CMC for abd21 took 1358.1796s for 7.71s.
+A compution to real-time ratio of: 176.1582
+Loading file.....\new IK solutions\abd22.mot
+CMC for abd22 took 1709.4407s for 8.28s.
+A compution to real-time ratio of: 206.4542
+Loading file.....\new IK solutions\abd23.mot
+CMC for abd23 took 1975.4292s for 9.37s.
+A compution to real-time ratio of: 210.8249
+Loading file.....\new IK solutions\flx21.mot
+CMC for flx21 took 1494.8619s for 7.08s.
+A compution to real-time ratio of: 211.1387
+Loading file.....\new IK solutions\flx22.mot
+CMC for flx22 took 1748.5859s for 8.2s.
+A compution to real-time ratio of: 213.2422
+Loading file.....\new IK solutions\flx23.mot
+CMC for flx23 took 1662.4019s for 7.73s.
+A compution to real-time ratio of: 215.0585
+Loading file.....\new IK solutions\shrug21.mot
+CMC for shrug21 took 911.7453s for 4.32s.
+A compution to real-time ratio of: 211.0521
+Loading file.....\new IK solutions\shrug22.mot
+CMC for shrug22 took 1039.8549s for 4.79s.
+A compution to real-time ratio of: 217.0887
+Loading file.....\new IK solutions\shrug23.mot
+CMC for shrug23 took 1183.9831s for 5.55s.
+A compution to real-time ratio of: 213.3303
