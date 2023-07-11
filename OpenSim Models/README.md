@@ -10,4 +10,4 @@ Lastly, to correctly consider the glenohumeral constraint, we add three extra ma
 - the center of the humeral head (`HumHead_Center`);
 - the width of the glenoid (`Glenoid_Edge`).
 
-When considering a new model, they should be added there as well.
+When considering your own model with the RMR solver, these markers should be added there as well.

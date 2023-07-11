@@ -1,8 +1,8 @@
-# Rapid Muscle Redundancy Solver
+# RMR Solver
 
 ## What is it?
 
-**RMR solver** stands for Rapid Muscle Redundancy solver. It is an algorithm which solves the muscle redundancy problem, by selecting the muscles which are recruited by the human body to generate a given motion (leveraging a musculoskeletal model). The solver, tested on the dataset and model available freely at https://simtk.org/projects/thoracoscapular (Seth et al, 2019),  is presented in detail in our paper:
+**RMR solver** stands for _Rapid Muscle Redundancy_ solver. It is an algorithm which solves the muscle redundancy problem, by selecting the muscles which are recruited by the human body to generate a given motion (leveraging a musculoskeletal model). The solver, tested on the dataset and model available freely at https://simtk.org/projects/thoracoscapular (Seth et al, 2019),  is presented in detail in our paper:
 
 ```bib
 @article{todo,
@@ -68,7 +68,7 @@ In order to use the RMR solver, you will need:
     - **EMG and marker data**, available for free (licensed CC BY 4.0) at: https://simtk.org/projects/thoracoscapular# . Following the link, you will be redirected to the SimTK page of the paper where the data is published. Clicking on `Download Latest Releases` and providing a simple motivation for why you are interested in the data, you will be able to download the original study, that contains the dataset in `ThoracoscapularShoulderPaperMaterials\ExperimentalData`. Just copy-paste the content of `EMG` and `Markers` in the same sub-folders of our `ExperimentalData` folder and you are ready to go! 
 ## Structure
 The material is organized as follows:
-- `Code` contains the scripts used for general data (pre)processing (`Data Processing`) and for running the RMR solver simulations as well as CMC (`Compute Muscle Activity`)
+- `Code` contains the scripts used for general data (pre)processing and statistical analysis (`Data Processing`) and for running the RMR solver simulations as well as CMC (`Compute Muscle Activity`)
 - `OpenSim Models` stores the biomechanical models that are considered;
 - `ExperimentalData` will store the dataset considered in the paper (marker data and filtered EMG values), freely obtainable as described above;
 - `Results` stores our results, supporting the reproducibility of our findings.
@@ -78,20 +78,24 @@ Each of the folders also have a more specific `README`.
 ## Brief guide to our code
 
 1. In order to reproduce the figures and results commented in the paper, please run:
-    - `Code\Image Generation\main_plotMuscleResults.m` (returns figures comparing the RMR solver against the CMC algorithm and filtered EMG data, and mean absolute errors resulting from this comparison);
-    - `Code\Data Processing\spm_analysis.m` (performs a statistical analysis to determine the effect of the glenohumeral constraint on the muscle activations predicted by the RMR solver) 
+    - `Code\Image Generation\PlotResults.m` (produces figures comparing the RMR solver against the CMC algorithm and filtered EMG data, and mean absolute errors resulting from this comparison);
+    - `Code\Data Processing\SPM_robustness_analysis.m` (performs a statistical analysis to determine the effect of the glenohumeral constraint on the muscle activations predicted by the RMR solver) 
     
       [Note: in order to run, it requires installing the SPM1D package]
 
 2. In order to use the RMR solver on the dataset, and to estimate realistic muscle activations given user-chosen motions, please run:
     - `Code\Compute Muscle Activation\RMR solver\main_analyze_dataset.m`
+  This scripts produces our numerical results and can be used as a template to apply the RMR solver in other scenarios.
 
 
-3. To perform a similar CMC analysis on the dataset, to reach our same results, please run:
+3. To perform a similar CMC analysis on the dataset, please run:
     - `Code\Compute Muscle Activation\CMC analysis\batch_CMC_analysis.m` (by default considers the whole dataset)
 
 
 If you wish to make use of the RMR solver, you can either download the individual files the you need or (recommended) you can fork this repository into your own, and work freely there! We encourage you to try the method on your own data/model: in case you do, remember to cite our publication!
+
+### Trouble-shooting
+If you encounter any troubles or issues with running the code contained in this repository, feel free to open an issue and report it. We will do our best to help you!
 
 
 ## License

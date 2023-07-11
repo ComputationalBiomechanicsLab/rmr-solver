@@ -5,6 +5,4 @@ In particular, the data needed is:
 - marker data 3D trajectories (in `.trc` format)
 - filtered EMG values for superficial muscles (ground-truth for the muscle activations, in `.exp` format)
 
-Inside the `Markers\noise_diversified` folder you can find already the dataset augmented with white Gaussian noise, described in our paper.
-
 The folder `IK setup files` collects the setup files needed to perform the inverse kinematics on the basis of the experimental marker data, and the musculoskeletal model considered.

@@ -1,5 +1,5 @@
-## Marker data
-This folder is used to collect the marker data corresponding to the various tasks that are analyzed in our paper.
+## EMG data
+This folder is used to collect the EMG data corresponding to the various tasks that are analyzed in our paper.
 The movements were performed by a single subject, and are:
 - unloaded abduction (ABD01, ABD02, ABD03)
 - loaded abduction (ABD21, ABD22, ABD23)
