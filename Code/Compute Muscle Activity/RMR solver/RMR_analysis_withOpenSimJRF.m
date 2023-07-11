@@ -14,8 +14,12 @@ function [optimizationStatus, unfeasibility_flags, tOptim, file_results] = RMR_a
 %
 % The code is written specifically to consider a thoracoscapular shoulder
 % model that has been already scaled to the biometrics of the subject of
-% interest However, this script can be generalized to consider other models 
-% and data without changing its main structure. 
+% interest. However, this script can be generalized to consider other models 
+% and data without changing its main structure.
+%
+% This version of the code retrieves the joint reaction force via a
+% a force-balancing procedure performed by the OpenSIm API, which is much slower
+% than the one we propose in "RMR_analysis.m" 
 %
 % INPUTS:
 % * subject_considered: string defining the name of the subject analyzed
@@ -88,7 +92,7 @@ glen = alljoints.get('GlenoHumeral');
 
 model_temp = model.clone();    % create a temporary copy of the model, to be used in the IK tool
 state = model_temp.initSystem();
-[maxAngle, ~] = get_glenoid_status(model_temp, state); % does it work without ~?
+[maxAngle, ~] = get_glenoid_status(model_temp, state); % the value for maxAngle can also be given directly by the user
 
 %% Load the trc file to be considered, if the input is a trc file, and perform IK
 if trc_file

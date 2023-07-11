@@ -1,11 +1,14 @@
 % Script to run the Rapid Muscle Redundancy (RMR) solver on user-selected
 % experiments, considering multiple models.
-% The user is prompted with the selection of the tasks to analyze.
-% Within the script, it is possible to adjust the downsampling to be
-% applied, and whether the analysis should include the glenohumeral
-% constraint or not.
+%
+% Note, before running this script, you have to generate the perturbed
+% models by running the "perturb_models.m" contained in the folder "Model
+% Perturbation" of this repository.
+% 
 % The same analysis is performed multiple times, if various models are
-% selected.
+% selected. Note that, to speed up the analysis, we make use of the
+% Parallel Computing Toolbox from Matlab. If you do not have access to it,
+% simply deselect the corresponding flag.
 %
 % Author: Italo Belli (i.belli@tudelft.nl) 2023
 
@@ -21,10 +24,10 @@ cd(pathstr);
 
 % getting path to other folders in this repo
 addpath(pathstr)
-cd ..\..\..\..\
+cd ..\..\..\
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code\Data Processing\Matlab\'))
+addpath(fullfile(path_to_repo, 'Code\Data Processing\'))
 
 %% Parameters
 % where you have the experimental files (.trc)

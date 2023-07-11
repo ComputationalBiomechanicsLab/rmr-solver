@@ -18,10 +18,10 @@ cd(pathstr);
 
 % getting path to other folders in this repo
 addpath(pathstr)
-cd ..\..\..\..\
+cd ..\..\..\
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code\Data Processing\Matlab\'))
+addpath(fullfile(path_to_repo, 'Code\Data Processing\'))
 
 % where you have the experimental files (.trc)
 trc_path = fullfile(path_to_repo, 'ExperimentalData\Markers');
@@ -60,8 +60,7 @@ weight_coord = [weight_abd, weight_elev, weight_up_rot, weigth_wing];
 % Downsampling
 time_interval = 1;
 
-% Flags (Select whether to enforce constraint 3 and 4 from the formulation
-% reported in the paper)
+% Flags (Select whether to enforce constraints)
 dynamic_bounds = true;              % enforcing continuity of the activations from one timestep to the next, to respect first-order dynamics
 enforce_GH_constraint = true;       % enforcing directional constraint on the glenohumeral joint force
 
@@ -82,7 +81,8 @@ for trc_file_index=1:num_files
         experiment = append(path,files);
         has_2kg_weight = str2num(experiment(end-5));      % based on file name
     end
-
+    
+    % consider the correct model in the analysis, based on the .trc files
     if has_2kg_weight
         [aux_optimization_status, aux_unfeasibility_flags, tOptim(trc_file_index), aux_result_file] = RMR_analysis(dataset_considered, model_2kg, experiment, 0, weight_coord, time_interval, dynamic_bounds, enforce_GH_constraint, saving_path);
     else

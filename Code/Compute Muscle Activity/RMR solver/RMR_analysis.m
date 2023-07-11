@@ -20,8 +20,8 @@ function [optimizationStatus, unfeasibility_flags, tOptim, file_results] = RMR_a
 % INPUTS:
 % * subject_considered: string defining the name of the subject analyzed
 %                       (used to save results)
-% * model: model to be used for the SO 
-%          (valid TSM model with GH markers and coordinate actuators)
+% * model_original: model to be used for the SO 
+%                  (valid TSM model with GH markers and coordinate actuators)
 % * trc_file : path to the file - and file name - from which to retrieve
 %              marker data for IK and subsequent SO (set to 0 if the input
 %              is actually the motion file)
@@ -60,7 +60,7 @@ import org.opensim.modeling.*;
 
 %% General settings
 % if these are set to true, results are printed but the code will be slower
-print_flag = false;         
+print_flag = true;         
 withviz = false;
 
 %% Set the correct paths
@@ -71,10 +71,10 @@ cd(pathstr);
 
 % getting path to other folders in this repo
 addpath(pathstr)
-cd ..\..\..\..\
+cd ..\..\..\
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code\Data Processing\Matlab\'))
+addpath(fullfile(path_to_repo, 'Code\Data Processing\'))
 
 % cd to Personal Results to have all the results saved there
 cd([path_to_repo, '\Personal_Results']);
@@ -90,7 +90,7 @@ alljoints = model_temp.getJointSet;
 glen = alljoints.get('GlenoHumeral');
 
 state = model_temp.initSystem();
-[maxAngle, ~] = get_glenoid_status(model_temp, state); % it could also just be a number set by the user
+[maxAngle, ~] = get_glenoid_status(model_temp, state); % the value for maxAngle can also be given directly by the user
 
 %% Load the trc file to be considered, if the input is a trc file, and perform IK
 if trc_file
@@ -126,7 +126,7 @@ if trc_file
     motion_file_name = append(experiment_name, '.mot');
     
     ikSetupFile = [path_to_repo,'' ...
-            '\Code\Scale Model\Utilities\setup_files\Standford2019_experiments\IKSetup_2019.xml'];
+            '\Code\Utilities\IKSetup_2019.xml'];
     
     ikTool = InverseKinematicsTool(ikSetupFile);
     ikTool.setMarkerDataFileName(trc_file);
@@ -357,7 +357,7 @@ for time_instant = 1:numTimePoints
 
     % get the vector Vec_H2GC between humeral head and the glenoid center
     % (it is expressed in the ground frame)
-    [~, Vec_H2GC] = get_glenoid_status(model_temp, state);
+    [~, Vec_H2GC] = get_glenoid_status(model_temp, state); 
     
     % store the values of active and passive maximum force in the current
     % configuration
