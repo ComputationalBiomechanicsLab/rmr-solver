@@ -4,7 +4,7 @@
 %
 % Adapted from original script released with the paper:
 %
-%     "Muscle Contributions to Upper-Extremity Movement andWork From a Musculoskeletal Modelof the Human Shoulder, Seth et al. 2019"
+%     "Muscle Contributions to Upper-Extremity Movement and Work From a Musculoskeletal Modelof the Human Shoulder, Seth et al. 2019"
 %
 % (available at https://simtk.org/projects/thoracoscapular)
 %
