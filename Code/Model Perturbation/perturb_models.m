@@ -44,7 +44,7 @@ unperturbed_markers = ["Glenoid_Center", "HumHead_Center", "Glenoid_Edge"];  % w
 
 % location and name of the IK setup file used to assess validity of the 
 % perturbed models
-path_IK_setup = fullfile(path_to_repo, 'ExperimentalData/Markers');
+path_IK_setup = fullfile(path_to_repo, 'ExperimentalData/IK setup files/');
 IK_setup_file = 'IKSetup_2019.xml';
 
 % maximum value of RMSE allowable for a perturbed model to be considered valid

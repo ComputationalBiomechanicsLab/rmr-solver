@@ -126,7 +126,7 @@ if trc_file
     motion_file_name = append(experiment_name, '.mot');
     
     ikSetupFile = [path_to_repo,'' ...
-            '\Code\Utilities\IKSetup_2019.xml'];
+            '\ExperimentalData\IK setup files\IKSetup_2019.xml'];
     
     ikTool = InverseKinematicsTool(ikSetupFile);
     ikTool.setMarkerDataFileName(trc_file);
