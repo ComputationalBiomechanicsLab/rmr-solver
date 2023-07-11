@@ -10,7 +10,7 @@ mfile_name          = mfilename('fullpath');
 cd(pathstr);
 
 addpath(pathstr)
-cd '..\..\..'
+cd '..\..\'
 path_to_repo = pwd;
 addpath(path_to_repo)
 
@@ -44,7 +44,7 @@ muscle_Name={'Trapezius, scapula middle';
     'Teres major'};
 
 % load the idexes corresponding to the different phases of each motion, in the CMC results 
-load(fullfile(path_to_repo, 'Results/new CMC analysis/index_matrix_CMC_newStudy.mat'));
+load(fullfile(path_to_repo, 'Results/CMC analysis/index_matrix_CMC_newStudy.mat'));
 
 %% User selection phase.
 % The user selects:
@@ -84,7 +84,7 @@ end
 % 2. Select which RMR solver results to consider (with GH constraint)
 answer_rmr_selection = listdlg('PromptString',{'Plot RMR analysis with GH constraint'}, ...
     'SelectionMode','single','ListString', ...
-    {'no', '100 Hz', '10 Hz'});
+    {'no', '100 Hz'});
 
 if answer_rmr_selection==1
     disp("Disregarding RMR results (with GH constraint)")
@@ -92,17 +92,13 @@ if answer_rmr_selection==1
     
 elseif answer_rmr_selection==2
     disp("Considering RMR results at 100 Hz (with GH constraint)")
-    path_RMR_GH = fullfile(path_to_repo, '\Results\Rapid MRS\100 Hz\with GH');
-
-elseif answer_rmr_selection==3
-    disp("Considering RMR results at 10 Hz (with GH constraint)")
-    path_RMR_GH = fullfile(path_to_repo, '\Results\Rapid MRS\10 Hz\with GH');
+    path_RMR_GH = fullfile(path_to_repo, '\Results\RMR analysis\100 Hz\with GH');
 end
 
 % 3. Select which RMR solver results to consider (without GH constraint)
 answer_rmr_selection = listdlg('PromptString',{'Plot RMR analysis without GH constraint'}, ...
     'SelectionMode','single','ListString', ...
-    {'no', '100 Hz', '10 Hz'});
+    {'no', '100 Hz'});
 
 if answer_rmr_selection==1
     disp("Disregarding RMR results (without GH constraint)")
@@ -110,17 +106,13 @@ if answer_rmr_selection==1
     
 elseif answer_rmr_selection==2
     disp("Considering RMR results at 100 Hz (without GH constraint)")
-    path_RMR_noGH = fullfile(path_to_repo, '\Results\Rapid MRS\100 Hz\without GH');
-
-elseif answer_rmr_selection==3
-    disp("Considering RMR results at 10 Hz (without GH constraint)")
-    path_RMR_noGH = fullfile(path_to_repo, '\Results\Rapid MRS\10 Hz\without GH');
+    path_RMR_noGH = fullfile(path_to_repo, '\Results\RMR analysis\100 Hz\without GH');
 end
 
 disp("Considering CMC results")
 % Select the directory containing CMC results
 for i=1:18
-    Dir_file_CMC(i)=fullfile(path_to_repo, 'Results/new CMC analysis/',taskNames(i),'/',fileName);
+    Dir_file_CMC(i)=fullfile(path_to_repo, 'Results/CMC analysis/',taskNames(i),'/',fileName);
 end
 file=char(Dir_file_CMC);
 
