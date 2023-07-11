@@ -12,10 +12,10 @@ cd(pathstr);
 
 % getting path to other folders in this repo
 addpath(pathstr)
-cd ..\
+cd ..\..\
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code\Data Processing\Matlab\'))
+addpath(fullfile(path_to_repo, 'Code\Data Processing\'))
 
 %% Parameters
 % where to save the results
@@ -37,9 +37,11 @@ common_name = 'TSM_subject_2kgWeight';
 % select file name of the original model
 [unloadedFileNames, path_unloaded_model] = uigetfile('*.osim', 'Select the OpenSim models to add the load on', path_to_repo, 'MultiSelect','on');
 
-num_models  = size(unloadedFileNames,2);
-if num_models==1
+if ~iscell(unloadedFileNames)
     unloadedFileNames = {unloadedFileNames};
+    num_models  = 1;
+else
+    num_models  = size(unloadedFileNames,2);
 end
 
 tic

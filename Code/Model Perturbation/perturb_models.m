@@ -6,6 +6,10 @@
 %
 % This code has been developed based on the freely available codes at 
 % https://simtk.org/projects/quant_uncertain
+%
+% In our pipeline, we first ran this script with the load-free model as an
+% input, and then used the "add_2kgLoad_toModels.m" to programmatically add
+% the load to all of the models.
 
 clear; clc;
 
