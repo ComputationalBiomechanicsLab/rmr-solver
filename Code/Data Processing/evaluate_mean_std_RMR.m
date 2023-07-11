@@ -12,7 +12,7 @@ function [dataAverage,dataStdup,dataStdlow, target_data] = evaluate_mean_std_RMR
 % author: Italo Belli (i.belli@tudelft.nl) 2023
 
 
-% load SO results from the 3 experiments
+% load RMR results from the 3 experiments
 experiment1 = load(fullfile(path_results, (strcat('muscle_activations_Seth2019_experiment_', task(1:end-4), task(end-2), '1'))));
 experiment2 = load(fullfile(path_results, (strcat('muscle_activations_Seth2019_experiment_', task(1:end-4), task(end-2), '2'))));
 experiment3 = load(fullfile(path_results, (strcat('muscle_activations_Seth2019_experiment_', task(1:end-4), task(end-2), '3'))));
