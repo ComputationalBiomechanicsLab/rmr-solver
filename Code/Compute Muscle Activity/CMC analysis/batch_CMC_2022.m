@@ -1,8 +1,13 @@
-% This scripts performs a batch CMC analysis of the various experiments in
+% This script performs a batch CMC analysis of the various experiments in
 % the dataset (specified with taskNames). A more synthetic analysis can be
 % achieved by specifying only the tasks of interest in the list.
 %
-% Adapted from original script released with "Muscle Contributions toUpper-Extremity Movement and Work From a Musculoskeletal Modelof the Human Shoulder", Seth et al. 2019
+% Adapted from original script released with the paper:
+%
+%     "Muscle Contributions to Upper-Extremity Movement andWork From a Musculoskeletal Modelof the Human Shoulder, Seth et al. 2019"
+%
+% (available at https://simtk.org/projects/thoracoscapular)
+%
 % Modified 2023 by Italo Belli (i.belli@tudelft.nl)
 
 import org.opensim.modeling.*;
@@ -17,11 +22,14 @@ cd(pathstr);
 
 % getting path to other folders in this repo
 addpath(pathstr)
-cd ..\..\..\..\
+cd ..\..\..\
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code\Data Processing\Matlab\'))
+addpath(fullfile(path_to_repo, 'Code\Data Processing\'))
 cd(pathstr);
+
+% where to save the results of CMC analysis
+saving_path = fullfile(path_to_repo, '\Personal_Results\');
 
 % specify task names to run CMC for (can be a subset of the following)
 taskNames={'abd01';'abd02';'abd03';'flx01';'flx02';'flx03';'shrug01'; 'shrug02';'shrug03'; ...
@@ -69,11 +77,11 @@ for i=1:length(taskNames)
         cmc.setTaskSetFileName(tempShrugTaskFileName);
     end 
     
-    motion=[fullfile(path_to_repo, 'Results/new IK solutions\',taskNames{i}),'.mot'];
+    motion=[fullfile(path_to_repo, 'Results\IK solutions\',taskNames{i}),'.mot'];
     cmc.setDesiredKinematicsFileName(motion);
     cmc.setStartTime(0);
     cmc.setFinalTime(15);
-    output=[currentDir, '/', taskNames{i}];
+    output=[saving_path, taskNames{i}];
     cmc.setResultsDir(output);
     setupfile=['CMC_setup_', taskNames{i}, '.xml'];
     cmc.print(setupfile);
