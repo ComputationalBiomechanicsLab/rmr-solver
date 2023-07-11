@@ -33,8 +33,8 @@ addpath(fullfile(path_to_repo, 'Code\Data Processing\'))
 % where you have the experimental files (.trc)
 trc_path = fullfile(path_to_repo, 'ExperimentalData\Markers');
 
-% where you have the models (.osim)
-model_path = fullfile(path_to_repo, 'OpenSim Models\for RMR solver\perturbed_100\');
+% where you have the perturbed models (.osim)
+model_path = fullfile(path_to_repo, 'OpenSim Models\for RMR solver\perturbed models\');
 
 % where to save the results
 saving_path = fullfile(path_to_repo, 'Personal_Results');
