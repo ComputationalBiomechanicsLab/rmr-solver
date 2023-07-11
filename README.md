@@ -2,7 +2,40 @@
 
 ## What is it?
 
-**RMR solver** stands for Rapid Muscle Redundancy solver. It is an algorithm which solves the muscle redundancy problem, by selecting the muscles which are recruited by the human body to generate a given motion (leveraging a musculoskeletal model). The solver is presented in detail in our paper ("_Effects of glenohumeral joint stability on estimated shoulder muscle actions: a computational biomechanics study using a rapid muscle redundancy solver_"), and has been tested on the dataset and model available freely at https://simtk.org/projects/thoracoscapular (Seth et al, 2019).
+**RMR solver** stands for Rapid Muscle Redundancy solver. It is an algorithm which solves the muscle redundancy problem, by selecting the muscles which are recruited by the human body to generate a given motion (leveraging a musculoskeletal model). The solver, tested on the dataset and model available freely at https://simtk.org/projects/thoracoscapular (Seth et al, 2019),  is presented in detail in our paper:
+
+```bib
+@article{todo,
+  title={Does enforcing glenohumeral joint stability matter?
+  A new rapid muscle redundancy solver highlights the importance of non-superficial shoulder muscles},
+  author={Belli, Italo and Joshi, Sagar and Prendergast, J Micah and Beck, Irene and Della Santina, Cosimo and Peternel, Luka and Seth, Ajay},
+  journal={biorXiv preprint},
+  year={2023}
+}
+```
+
+<table align="center">
+  <tr>
+    <td colspan="2" align="center">Funding Institutions</td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a>
+        <img src="https://user-images.githubusercontent.com/50029203/226883398-97b28065-e144-493b-8a6c-5cbbd9000411.png" alt="TUD logo" height="128">
+        <br />
+        <a href="https://www.tudelft.nl/3me/over/afdelingen/biomechanical-engineering">Biomechanical Engineering</a> and <br />
+        <a href="https://www.tudelft.nl/3me/over/afdelingen/cognitive-robotics-cor">Cognitive Robotics</a> at TU Delft</p>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://chanzuckerberg.com/">
+        <img src="https://user-images.githubusercontent.com/50029203/226883506-fbb59348-38a4-43f9-93c9-2c7b8ba63619.png" alt="CZI logo" width="128" height="128">
+        <br />
+        Chan Zuckerberg Initiative
+      </a>
+    </td>
+  </tr>
+</table>
 
 ## Features
 The RMR solver solves for muscle and joint forces by implementing three new features: 
@@ -37,7 +70,7 @@ In order to use the RMR solver, you will need:
 The material is organized as follows:
 - `Code` contains the scripts used for general data (pre)processing (`Data Processing`) and for running the RMR solver simulations as well as CMC (`Compute Muscle Activity`)
 - `OpenSim Models` stores the biomechanical models that are considered;
-- `ExperimentalData` stores the dataset considered in the paper (marker data and filtered EMG values)
+- `ExperimentalData` will store the dataset considered in the paper (marker data and filtered EMG values), freely obtainable as described above;
 - `Results` stores our results, supporting the reproducibility of our findings.
 
 Each of the folders also have a more specific `README`.
@@ -48,7 +81,7 @@ Each of the folders also have a more specific `README`.
     - `Code\Image Generation\main_plotMuscleResults.m` (returns figures comparing the RMR solver against the CMC algorithm and filtered EMG data, and mean absolute errors resulting from this comparison);
     - `Code\Data Processing\spm_analysis.m` (performs a statistical analysis to determine the effect of the glenohumeral constraint on the muscle activations predicted by the RMR solver) 
     
-      [Note: it does not run by itself, needs to be copy-pasted in the installation folder of the SPM1D package, as detailed in the script itself]
+      [Note: in order to run, it requires installing the SPM1D package]
 
 2. In order to use the RMR solver on the dataset, and to estimate realistic muscle activations given user-chosen motions, please run:
     - `Code\Compute Muscle Activation\RMR solver\main_analyze_dataset.m`
@@ -64,7 +97,9 @@ If you wish to make use of the RMR solver, you can either download the individua
 ## License
 Our code is licensed under the Apache 2.0 license (see the `LICENSE_code` file), while the data and models are licensed under CC BY 4.0 Use Agreement terms.
 ```
-Technische Universiteit Delft hereby disclaims all copyright interest in the program “RMR solver” developed to solve the muscle redundancy problem in biomechanical models written by the Author(s).
+Technische Universiteit Delft hereby disclaims all copyright interest in the program “RMR solver”
+developed to solve the muscle redundancy problem in biomechanical models written by the Author(s).
+
 Prof. Dr. Ir. Fred van Keulen, Dean of Faculty of Mechanical, Maritime and Materials Engineering (3mE).
 ```
 ## Contributors
