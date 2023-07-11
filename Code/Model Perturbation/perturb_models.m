@@ -1,9 +1,11 @@
-% This script generates a set of models where each is identical to the model
-% specified by the user but where the markers have been randomly perturbed from
+% This script generates a set of models. Each is identical to the model
+% specified by the user, while the markers have been randomly perturbed from
 % their original locations, up to a specified maximum distance.
-% The user can modify the "Parameters" section.
+% The user can modify the "Parameters" section to adjust the scripts to
+% their needs.
 %
-% It is written on the basis of the codes freely available at https://simtk.org/projects/quant_uncertain
+% This code has been developed based on the freely available codes at 
+% https://simtk.org/projects/quant_uncertain
 
 clear; clc;
 
@@ -17,20 +19,21 @@ cd(pathstr);
 
 % getting path to other folders in this repo
 addpath(pathstr)
-cd ..\
+cd ..\..\
+
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code\Data Processing\Matlab\'))
+addpath(fullfile(path_to_repo, 'Code\Data Processing\'))
 
 %% Parameters
 % select file name of the original model
 [inputFileName, path_model] = uigetfile('*.osim', 'Select the OpenSim model to perturb', path_to_repo, 'MultiSelect','off');
 
-% Number of models to generate
-numModels = 100;
+% Number of models to generate (set to 100 in the paper's pipeline)
+numModels = 100; % 100
 
 % Maximum distance by which each marker will be perturbed, in meters
-maxRadius = 0.01;
+maxRadius = 0.01; % 0.01
 
 % Specify markers that should not be perturbed
 unperturbed_markers = ["Glenoid_Center", "HumHead_Center", "Glenoid_Edge"];  % we retain these markers as they are virtual markers defining the glenohumeral constraint
