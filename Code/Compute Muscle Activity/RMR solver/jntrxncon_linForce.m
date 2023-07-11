@@ -23,9 +23,9 @@ function [c, ceq] = jntrxncon_linForce(x, directionVector, maxAngle, A_f, F_r0, 
 % the activation of each actuator and the value F_r0 (found when all the
 % actuators do not produce any force) and x is the vector of activations.
 %
-% The formulation implemented here assumes that Static Optimization is
-% being performed on the model (and this justifies the linearized
-% formulation of the force).
+% The formulation implemented here assumes that the model state is defined
+% and fixed for the given time interval. This justifies the linearized \
+% formulation of the force
 %
 % author: Italo Belli (i.belli@tudelft.nl) 2022
 
