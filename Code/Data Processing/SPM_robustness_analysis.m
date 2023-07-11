@@ -5,16 +5,26 @@
 % In its current structure, it is employed to analyze the difference in
 % activations induced by the glenohumeral (GH) stability condition in the
 % solver, when simulating shoulder movements.
-% The results of the simulations with the GH constraint are assumed to be 
-% stored into a single folder (named withGH), and the results for the 
-% simulations without in another one (named noGH).
-% The naming convention for the results of the RMR is assumed to be:
-% "muscle_activations_Seth2019_2kgWeight1_noGH_ABD21.mat"
-% where the last part of the name specifies the experimental data (ABD21)
-% used as input to the RMR analysis.
+%
 % Resulting activations for the same muscle are aligned across different
 % experiments, and compared using a statistical parametric mapping (SPM)
 % paired t-test.
+%
+%
+% The results of the simulations with the GH constraint are assumed to be 
+% stored into a single folder (named withGH), and the results for the 
+% simulations without in another one (named noGH). You can make use of the
+% structure in 'Results/RMR analysis/robustness analysis' to organize your
+% files efficiently.
+%
+% The naming convention for the results of the RMR is assumed to be:
+% "muscle_activations_Seth2019_2kgWeight1_noGH_ABD21.mat"
+% where the last part of the name specifies the experimental data (ABD21)
+% used as input to the RMR analysis. This naming is automatically respected
+% when generating your results using the 'analyse_perturbed_models.m' in
+% this repository.
+%
+%
 %
 % The external package SPM1D is required, check detailed instructions on
 % how to get it and configure it at https://spm1d.org/install/InstallationMatlab.html
@@ -27,7 +37,9 @@ nMusc = 33;
 
 % Flag to decide whether the activations of different bundles composing the 
 % rotator cuff muscles should be averaged before the SPM analysis
-average_RC_activation = true;
+% Since in this case we are performing a model-to-model comparison, it
+% makes sense to set it to "false"
+average_RC_activation = false;
 
 % p-value for significance in the SPM paired t-test
 p_value = 0.01;
@@ -40,10 +52,10 @@ cd(pathstr);
 
 % change it to path to repo
 addpath(pathstr)
-cd '../../..'
+cd '../../'
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(append(path_to_repo, '/Code/Compute Muscle Activity/Matlab'))
+addpath(append(path_to_repo, '/Code/Compute Muscle Activity'))
 
 % select folders where the RMR results are stored
 % select folder of the results obtained considering GH stability (withGH)
