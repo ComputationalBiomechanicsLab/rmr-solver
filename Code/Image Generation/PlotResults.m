@@ -13,6 +13,7 @@ addpath(pathstr)
 cd '..\..\'
 path_to_repo = pwd;
 addpath(path_to_repo)
+addpath(fullfile(path_to_repo, 'Code\Data Processing'))
 
 %% SETTINGS for the study
 % specifiy the file name of the states file, output of CMC
