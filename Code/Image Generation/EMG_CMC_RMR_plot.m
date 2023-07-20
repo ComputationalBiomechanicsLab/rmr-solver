@@ -104,23 +104,23 @@ set(gca,'fontsize',15,'LineWidth',2)
 betweenx_emg = [target_EMG,fliplr(target_EMG)];
 betweeny_emg = [EMGstdup, fliplr(EMGstdlow)];
 h=fill(betweenx_emg,betweeny_emg,[0.8 0.8 0.8]);
-set(h,'EdgeColor','none')
-plot(target_EMG, EMGstdup,'Color',[0.8 0.8 0.8],'LineWidth',1.5)
+set(h,'EdgeColor','none', 'HandleVisibility', 'off')
+plot(target_EMG, EMGstdup,'Color',[0.8 0.8 0.8],'LineWidth',1.5, 'DisplayName', 'EMG signal')
 
 % plotting CMC results
 betweenx = [target_CMC,fliplr(target_CMC)];
 betweeny = [CMCstdup, fliplr(CMCstdlow)];
 h=fill(betweenx,betweeny,[1 0.8 1]);
-set(h,'EdgeColor','none')
-plot(target_CMC, CMCaverage,'m','LineWidth',1.5)
+set(h,'EdgeColor','none', 'HandleVisibility', 'off')
+plot(target_CMC, CMCaverage,'m','LineWidth',1.5, 'DisplayName', 'CMC')
 
 % plotting RMR results (with GH)
 if path_RMR_GH
     betweenx = [target_RMR_GH,fliplr(target_RMR_GH)];
     betweeny = [RMR_GH_stdup, fliplr(RMR_GH_stdlow)];
     h=fill(betweenx,betweeny,[0.8 1 0.8]);
-    set(h,'EdgeColor','none')
-    plot(target_RMR_GH, RMR_GH_average,'g','LineWidth',1.5)
+    set(h,'EdgeColor','none', 'HandleVisibility', 'off')
+    plot(target_RMR_GH, RMR_GH_average,'g','LineWidth',1.5, 'DisplayName', 'RMR')
 end
 
 % plotting RMR results (without GH)
@@ -128,12 +128,13 @@ if path_RMR_noGH
     betweenx = [target_RMR_noGH,fliplr(target_RMR_noGH)];
     betweeny = [RMR_noGH_stdup, fliplr(RMR_noGH_stdlow)];
     h=fill(betweenx,betweeny,[0.8 0.8 1]);
-    set(h,'EdgeColor','none')
-    plot(target_RMR_noGH, RMR_noGH_average,'Color', [0.3 0.3 1], 'LineWidth',1.5)
+    set(h,'EdgeColor','none', 'HandleVisibility', 'off')
+    plot(target_RMR_noGH, RMR_noGH_average,'Color', [0.3 0.3 1], 'LineWidth',1.5, 'DisplayName', 'RMR (no GH)')
 end
 
 axis([0 200 0 0.6])
 title(muscle_Name)
+legend()
 % optionally save the figures
 % figure_name = append(task, '_', muscle_Name{1});
 % saveas(fig, figure_name)
