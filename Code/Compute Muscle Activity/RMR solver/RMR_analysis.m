@@ -1,4 +1,4 @@
-function [optimizationStatus, unfeasibility_flags, tOptim, file_results] = RMR_analysis(subject_considered, model_original, trc_file, motion_file, weight_coord, time_interval, dynamic_activation_bounds, flag_GH_enforced, saving_path)
+function [optimizationStatus, unfeasibility_flags, tOptim, file_results] = RMR_analysis(subject_considered, model_original, trc_file, motion_file, weight_coord, time_interval, dynamic_activation_bounds, flag_GH_enforced, force_params, saving_path)
 % Rapid Muscle Redundancy (RMR) solver, leveraging OpenSim API.
 % Starting from experimental marker data (in .trc format) the optimal
 % muscle activations are found that can reproduce the motion, solving:
@@ -39,6 +39,7 @@ function [optimizationStatus, unfeasibility_flags, tOptim, file_results] = RMR_a
 %                              RMR solution
 % * flag_GH_enforced: true or false, if glenohumeral constraint is
 %                     considered or not
+% * force_params: parameters of the external force(s) applied
 % * saving_path: path to where the results of the redundancy solver are
 %                saved
 %
@@ -226,6 +227,72 @@ end
 
 if (withviz == true)
     model_temp.setUseVisualizer(true);
+end
+
+%% Add external force
+if force_params.apply_external_force
+    % this part requires to be rewritten to account for the custom external
+    % force that the user wants to apply
+    samples_EF = 0
+    point_of_application = force_params.EF_point_of_application;
+    file_name = force_params.EF_filename;
+
+    % TODO: add here the identifier that you are willing to use, and specify
+    % the body and the location in which the force is applied
+    if strcmp(point_of_application, 'your_identifier')
+        body = 'hand';                    % for a pushing task (like wheelchair) probably the force should be applied at the hand
+        marker_location = [0.0 0.0 0.0];  % To be modified with the correct position of the marker in the body frame                                   
+    end
+
+    % create the storage file in which the force value are saved
+    storage_file = append(force_params.EF_filename, '.mot');
+
+    % here we are setting the moments to be all 0. In case this is not the
+    % case, they should be set here too (last 3 columns of the matrix)
+    force_moments_matrix = zeros(samples_EF, 6);
+
+    force_moments_matrix(1:numel(force_vector_x),1) = force_vector_x;       % force along x axis    
+    force_moments_matrix(1:numel(force_vector_y),2) = force_vector_y;       % force along y axis
+    force_moments_matrix(1:numel(force_vector_z),3) = force_vector_z;       % force along z axis
+
+    % The marker position is kept fixed, as it is defined in the body frame
+    force_point = repmat(marker_location, [samples_EF,1]);
+    
+    data = [time, force_moments_matrix, force_point];
+    
+    % create  the motion file to be used in the ExternalLoads .xml file
+    columnNames = ["F_x" "F_y" "F_z" "M_x" "M_y" "M_z" "p_x" "p_y" "p_z"];
+    
+    writeMotStoData(data, 1, columnNames, file_name);
+    
+    mot_file_name = append(file_name, '.mot');
+    
+    % creating storage object
+    force_storage = Storage(mot_file_name, false);
+    force_storage.setName(mot_file_name(1:end-4));
+    force_storage.print(mot_file_name);
+    
+    % Create external force object
+    external_force = ExternalForce();
+    external_force.setName('Force');
+    external_force.set_applied_to_body(body);
+    external_force.set_force_expressed_in_body("ground");       % TODO: here it depends from the coordinate frame in which the force is expressed
+    external_force.set_point_expressed_in_body(body);
+    external_force.set_force_identifier('F_');
+    external_force.set_point_identifier('p_');
+    external_force.set_torque_identifier('M_');
+    external_force.set_data_source_name(mot_file_name);         % this line and the next "link" the storage file to the external force
+    external_force.setDataSource(force_storage);    
+    
+    xml_file_name = append(file_name, '.xml');
+    external_force.print(xml_file_name);                        % print the xml file where the ExternalForce is defined
+
+    % add the force to the model (it is added as the last element of the
+    % force set)
+    model.addForce(external_force);
+    
+    % ensure that the force is correctly integrated in teh model
+    model.finalizeConnections();
 end
 
 % Update the system to include any muscle modeling changes
