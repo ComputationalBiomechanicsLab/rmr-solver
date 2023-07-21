@@ -47,24 +47,28 @@ time_interval = 1;
 % Flags (Select whether to enforce constraints)
 dynamic_bounds = true;               % enforcing continuity of the activations from one timestep to the next, to respect first-order dynamics
 enforce_GH_constraint = false;       % enforcing directional constraint on the glenohumeral joint force
-apply_external_force = 0;
+apply_external_force = 1;
 
 %% Generate the external force and add it to the model
 force_params =[];
 force_params.apply_external_force = apply_external_force;
+force_1 = [];
 if apply_external_force
     external_force_filename = 'leg69_right_grf.xml';             % name of the filename in which the force is going to be stored
     
     data_storage = Storage(fullfile(model_path, 'Stance', 'leg69_stance_grf.mot'));
-    external_force = ExternalForce(data_storage, "ground_force_v", "ground_force_p", "ground_torque", "calcn_r", "ground", "ground");
+    external_force = ExternalForce(data_storage, "ground_force_v", "ground_force_p", "ground_torque_", "calcn_r", "ground", "ground");
     
     external_force.print(external_force_filename)
 
     % Save external force parameters in structure
-    force_params.ef_filename = external_force_filename;
-    force_params.ef_storage = data_storage;
-    force_params.ef = external_force;
+    force_1.ef_filename = external_force_filename;
+    force_1.ef_storage = data_storage;
+    force_1.ef = external_force;
 end
+
+force_params.num_forces = 1;
+force_params.forces{1} = force_1;
 
 %% Run Rapid Muscle Redundancy (RMR) solver
 disp('Running RMR')

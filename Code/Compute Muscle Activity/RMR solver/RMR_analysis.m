@@ -170,7 +170,7 @@ end
 % coordinate kinematic and generalized force data into MATLAB arrays. This 
 % function also filters and crops the loaded array based on its two input 
 % arguments (more details in loadFilterCropArray.m).
-lowpassFreq = 2.5; % Hz
+lowpassFreq = 3.0; % Hz
 timeRange = [start_time end_time];
 
 % get the coordinates from the output of the IK in rad for the rotational
@@ -242,16 +242,21 @@ end
 
 %% Add external force
 if force_params.apply_external_force
-    % this part requires to be rewritten to account for the custom external
-    % force that the user wants to apply
-    file_name = force_params.ef_filename;
-    storage_file = force_params.ef_storage;
-    external_force = force_params.ef; 
+    % get how many forces we need to apply
+    num_forces = force_params.num_forces;
 
-    % add the force to the model (it is added as the last element of the
-    % force set)
-    model_temp.addForce(external_force);
+    for force_index = 1:num_forces
+        % this part requires to be rewritten to account for the custom external
+        % force that the user wants to apply
+        file_name = force_params.forces{force_index}.ef_filename;
+        storage_file = force_params.forces{force_index}.ef_storage;
+        external_force = force_params.forces{force_index}.ef; 
     
+        % add the force to the model (it is added as the last element of the
+        % force set)
+        model_temp.addForce(external_force);
+    end
+
     % ensure that the force is correctly integrated in teh model
     model_temp.finalizeConnections();
 end
