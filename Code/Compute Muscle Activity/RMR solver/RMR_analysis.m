@@ -1,4 +1,4 @@
-function [optimizationStatus, unfeasibility_flags, tOptim, file_results] = RMR_analysis(subject_considered, model_original, trc_file, motion_file, weight_coord, time_interval, dynamic_activation_bounds, flag_GH_enforced, saving_path)
+function [optimizationStatus, unfeasibility_flags, tOptim, file_results] = RMR_analysis(subject_considered, model_original, trc_file, motion_file, weight_coord, time_interval, dynamic_activation_bounds, flag_JRC_enforced, force_params, saving_path)
 % Rapid Muscle Redundancy (RMR) solver, leveraging OpenSim API.
 % Starting from experimental marker data (in .trc format) the optimal
 % muscle activations are found that can reproduce the motion, solving:
@@ -37,8 +37,9 @@ function [optimizationStatus, unfeasibility_flags, tOptim, file_results] = RMR_a
 % *dynamic_activation_bounds : flag to indicate whether dynamic bounds must
 %                              be used to limit the activation values during 
 %                              RMR solution
-% * flag_GH_enforced: true or false, if glenohumeral constraint is
-%                     considered or not
+% * flag_JRC_enforced: true or false, if a joint reaction constraint is
+%                      considered or not
+% * force_params: parameters of the external force(s) applied
 % * saving_path: path to where the results of the redundancy solver are
 %                saved
 %
@@ -61,7 +62,7 @@ import org.opensim.modeling.*;
 %% General settings
 % if these are set to true, results are printed but the code will be slower
 print_flag = true;         
-withviz = false;
+withviz = true;
 
 %% Set the correct paths
 % set the path current folder to be the one where this script is contained
@@ -84,13 +85,13 @@ cd([path_to_repo, '\Personal_Results']);
 % state/properties outside this function
 model_temp = model_original.clone();    
 
-%% Getting quantities about GlenoHumeral joint
-% get the glenohumeral joint
-alljoints = model_temp.getJointSet;
-glen = alljoints.get('GlenoHumeral');
-
-state = model_temp.initSystem();
-[maxAngle, ~] = get_glenoid_status(model_temp, state); % the value for maxAngle can also be given directly by the user
+% %% Getting quantities about GlenoHumeral joint
+% % get the glenohumeral joint
+% alljoints = model_temp.getJointSet;
+% glen = alljoints.get('GlenoHumeral');
+% 
+% state = model_temp.initSystem();
+% [maxAngle, ~] = get_glenoid_status(model_temp, state); % the value for maxAngle can also be given directly by the user
 
 %% Load the trc file to be considered, if the input is a trc file, and perform IK
 if trc_file
@@ -175,8 +176,11 @@ timeRange = [start_time end_time];
 % get the coordinates from the output of the IK in rad for the rotational
 % joints
 [coordinates, coordNames, timesExp] = loadFilterCropArray(motion_file_name, lowpassFreq, timeRange);
-coordinates(:, 1:3) = deg2rad(coordinates(:, 1:3));
-coordinates(:, 7:end) = deg2rad(coordinates(:, 7:end));
+coordinates = coordinates(:, 1:7);
+coordNames = coordNames(1:7);
+
+coordinates(:, 1) = deg2rad(coordinates(:, 1));
+coordinates(:, 4:end) = deg2rad(coordinates(:, 4:end));
 
 % get the velocities for each joint in rad/s
 time_step_data = timesExp(2)-timesExp(1);
@@ -196,7 +200,7 @@ accNames = speedNames;
 % visually check the values of joint states, speeds and accelerations
 if print_flag
     figure
-    for i=1:16
+    for i=1:size(coordNames,1)
     subplot(4,4,i)
     hold on
     plot(coordinates(:,i))
@@ -216,16 +220,45 @@ muscles_downcasted = cell(numMuscles,1);
 muscleNames = cell(numMuscles,1);
 
 % save here downcasted muscles to a list 
-for index_muscle = 1:numMuscles
-   % Downcast base muscle to Millard2012EquilibriumMuscle
-   muscles_downcasted(index_muscle) = Millard2012EquilibriumMuscle.safeDownCast(muscles.get(index_muscle-1));
-   muscleNames{index_muscle} = char(muscles_downcasted{index_muscle});
-   muscles_downcasted{index_muscle}.set_ignore_tendon_compliance(true);  % not really relevant as actuation will be overwritten
-   muscles_downcasted{index_muscle}.set_ignore_activation_dynamics(true);
+if strcmpi(muscles.get(0).getConcreteClassName(), 'Thelen2003Muscle')
+    for index_muscle = 1:numMuscles
+       % Downcast base muscle to Thelen2003Muscle
+       muscles_downcasted(index_muscle) = Thelen2003Muscle.safeDownCast(muscles.get(index_muscle-1));
+       muscleNames{index_muscle} = char(muscles_downcasted{index_muscle});
+    end
+else   
+    for index_muscle = 1:numMuscles
+       % Downcast base muscle to Millard2012EquilibriumMuscle
+       muscles_downcasted(index_muscle) = Millard2012EquilibriumMuscle.safeDownCast(muscles.get(index_muscle-1));
+       muscleNames{index_muscle} = char(muscles_downcasted{index_muscle});
+       muscles_downcasted{index_muscle}.set_ignore_tendon_compliance(true);  % not really relevant as actuation will be overwritten
+       muscles_downcasted{index_muscle}.set_ignore_activation_dynamics(true);
+    end
 end
 
 if (withviz == true)
     model_temp.setUseVisualizer(true);
+end
+
+%% Add external force
+if force_params.apply_external_force
+    % get how many forces we need to apply
+    num_forces = force_params.num_forces;
+
+    for force_index = 1:num_forces
+        % this part requires to be rewritten to account for the custom external
+        % force that the user wants to apply
+        file_name = force_params.forces{force_index}.ef_filename;
+        storage_file = force_params.forces{force_index}.ef_storage;
+        external_force = force_params.forces{force_index}.ef; 
+    
+        % add the force to the model (it is added as the last element of the
+        % force set)
+        model_temp.addForce(external_force);
+    end
+
+    % ensure that the force is correctly integrated in teh model
+    model_temp.finalizeConnections();
 end
 
 % Update the system to include any muscle modeling changes
@@ -241,6 +274,7 @@ for i = 1:num_acts
     acts(i) = ScalarActuator.safeDownCast(allActs.get(i-1));
     if i<=numMuscles
         acts{i}.overrideActuation(state, true);
+        acts{i}.computeEquilibrium(state);
     end
 end
 
@@ -278,7 +312,7 @@ x0 = [0.1* ones(1,numMuscles), zeros(1,numCoordActs)];
 % We define the activation squared cost as a MATLAB anonymous function
 % It is model specific!
 epsilon = 0;
-w = [ones(1,numMuscles), epsilon*ones(1,8), 10*ones(1,9)];     % the cost function is written such that it allows the use of coord acts for the underactuated coordinates
+w = [ones(1,numMuscles), epsilon*ones(1,3), 10*ones(1,3)];     % the cost function is written such that it allows the use of coord acts for the underactuated coordinates
 cost =@(x) sum(w.*(x.^2));
 
 % Pre-allocate arrays to be filled in the optimization loop
@@ -341,6 +375,12 @@ for time_instant = 1:numTimePoints
     % realize the system to the velocity stage
     model_temp.realizeVelocity(state);
     
+    % set the muscle fiber to be the optimal one, to hopefully help
+    % convergence of the equilibrateMuscle() method
+    for index_muscle = 1:numMuscles
+        muscles_downcasted{index_muscle}.setFiberLength(state, muscles_downcasted{index_muscle}.get_optimal_fiber_length)
+    end
+
     % equilibrate the muscles to make them start in the correct state
     model_temp.equilibrateMuscles(state);
     
@@ -379,33 +419,22 @@ for time_instant = 1:numTimePoints
     params.useMuscles = 1;
     params.useControls = 1;
     params.modelControls = modelControls;
-    params.glen = glen;
+    params.joint_to_constrain = [];
+%     params.joint_to_constrain = glen;
 
-    [q_ddot_0, F_r0, ~] = findInducedAccelerationsForceMomentsGH(zeros(1,num_acts), params);
+    q_ddot_0 = findInducedAccelerationsForceMoments(zeros(1,num_acts), params);
     delQ_delX = eye(num_acts);
 
     for k = 1:num_acts
-        [incrementalForceAccel_k, F_rk, ~] = findInducedAccelerationsForceMomentsGH(delQ_delX(k,:),params);
+        [incrementalForceAccel_k, ~, ~] = findInducedAccelerationsForceMoments(delQ_delX(k,:),params);
         kthColumn_A_eq_acc =  incrementalForceAccel_k - q_ddot_0;
         A_eq_acc(:,k) = kthColumn_A_eq_acc;
-        kthColumn_A_eq_force =  F_rk - F_r0;
-        A_eq_force(:,k) = kthColumn_A_eq_force;
     end
 
     Beq = accelerations(time_instant,:)' - q_ddot_0;
 
-    % if the task considered is a SHRUGGING task, do not track the 'plane
-    % of elevation' (13th) and the 'axial rotation' (15th) coordinates as 
-    % they are poorly defined.
-    if strcmpi(experiment_name(1:5), 'shrug')
-        A_eq_acc(15, :) = zeros(size(A_eq_acc(15, :)));
-        A_eq_acc(13, :) = zeros(size(A_eq_acc(13, :)));
-        Beq(15, :) = zeros(size(Beq(15, :)));
-        Beq(13, :) = zeros(size(Beq(13, :)));
-    end
-
     % Call FMINCON to solve the problem
-    if flag_GH_enforced
+    if flag_JRC_enforced
         [x,~,exitflag,output] = fmincon(cost, x0, [], [], A_eq_acc, Beq, lb, ub, @(x)jntrxncon_linForce(x, Vec_H2GC, maxAngle, A_eq_force, F_r0), options);
         if exitflag ==0
             % call the solver again, starting from current x, in case the maximum iterations are exceeded
@@ -454,35 +483,30 @@ for time_instant = 1:numTimePoints
     % if we want to print suff, we need to compute it now
     if print_flag
         % Retrieve the optimal accelerations
-        [simulatedAccelerations(time_instant,:), ~, ~] = findInducedAccelerationsForceMomentsGH(x,params);
-
-        % if the task considered is a SHRUGGING task, disregard
-        % accelerations for plane of elevation and axial rotation (that are
-        % locked)
-        if strcmpi(experiment_name(1:5), 'shrug')
-            simulatedAccelerations(time_instant,[13,15]) = 0;
-        end
-
-        % retrieve the position of the joint reaction force on the approximated
-        % glenoid computing the reaction force vector at the given joint
-        % The force is expressed in the ground frame
-        force_vec = A_eq_force * xsol(time_instant, :)' + F_r0;
+        simulatedAccelerations(time_instant,:) = findInducedAccelerationsForceMoments(x,params);
         
-        % evaluate the relative angle between the reaction force and Vec_H2GC
-        cosTheta = max(min(dot(Vec_H2GC,force_vec)/(norm(Vec_H2GC)*norm(force_vec)),1),-1);
-        rel_angle(time_instant) = real(acosd(cosTheta));
-    
-        % evaluate the position on the glenoid where reaction force is exerted
-        norm_Vec_H2GC = Vec_H2GC/norm(Vec_H2GC);
-        norm_fv_in_ground(time_instant,:) = force_vec/norm(force_vec);
-    
-        beta_angle = atan(norm_Vec_H2GC(3)/norm_Vec_H2GC(1));
-        alpha_angle = atan(norm_Vec_H2GC(3)/(sin(beta_angle)*norm_Vec_H2GC(2)));
-    
-        Ry = [cos(beta_angle) 0 sin(beta_angle); 0 1 0; -sin(beta_angle) 0 cos(beta_angle)];
-        Rz = [cos(alpha_angle) -sin(alpha_angle) 0; sin(alpha_angle) cos(alpha_angle) 0; 0 0 1];
-    
-        norm_fv_rotated(time_instant,:) = Rz*Ry*norm_fv_in_ground(time_instant,:)';
+        if flag_JRC_enforced
+            % retrieve the position of the joint reaction force on the approximated
+            % glenoid computing the reaction force vector at the given joint
+            % The force is expressed in the ground frame
+            force_vec = A_eq_force * xsol(time_instant, :)' + F_r0;
+            
+            % evaluate the relative angle between the reaction force and Vec_H2GC
+            cosTheta = max(min(dot(Vec_H2GC,force_vec)/(norm(Vec_H2GC)*norm(force_vec)),1),-1);
+            rel_angle(time_instant) = real(acosd(cosTheta));
+        
+            % evaluate the position on the glenoid where reaction force is exerted
+            norm_Vec_H2GC = Vec_H2GC/norm(Vec_H2GC);
+            norm_fv_in_ground(time_instant,:) = force_vec/norm(force_vec);
+        
+            beta_angle = atan(norm_Vec_H2GC(3)/norm_Vec_H2GC(1));
+            alpha_angle = atan(norm_Vec_H2GC(3)/(sin(beta_angle)*norm_Vec_H2GC(2)));
+        
+            Ry = [cos(beta_angle) 0 sin(beta_angle); 0 1 0; -sin(beta_angle) 0 cos(beta_angle)];
+            Rz = [cos(alpha_angle) -sin(alpha_angle) 0; sin(alpha_angle) cos(alpha_angle) 0; 0 0 1];
+        
+            norm_fv_rotated(time_instant,:) = Rz*Ry*norm_fv_in_ground(time_instant,:)';
+        end
     end
 
     if (withviz == true)
@@ -572,20 +596,20 @@ if print_flag
     name_fig4 = append(experiment_name, '_AccViolation.png');
     saveas(f4, name_fig4)
 
-    % plot the constraint violation per timestep
-    violation_t = sum(violation, 2);
-    f5 = figure;
-    hold on
-    scatter(1:numTimePoints ,violation_t, 'filled')
-    plot(1:numTimePoints, violation_t, 'blue')
-    xlabel("samples")
-    ylabel("const violation")
-    grid on
-    title("Cumulative constraint violation per time-step")
-    hold off
-    f5.WindowState = 'maximized';
-    name_fig5 = append(experiment_name, '_CumulativeAccViolation.png');
-    saveas(f5, name_fig5)
+%     % plot the constraint violation per timestep
+%     violation_t = sum(violation, 2);
+%     f5 = figure;
+%     hold on
+%     scatter(1:numTimePoints ,violation_t, 'filled')
+%     plot(1:numTimePoints, violation_t, 'blue')
+%     xlabel("samples")
+%     ylabel("const violation")
+%     grid on
+%     title("Cumulative constraint violation per time-step")
+%     hold off
+%     f5.WindowState = 'maximized';
+%     name_fig5 = append(experiment_name, '_CumulativeAccViolation.png');
+%     saveas(f5, name_fig5)
 
 %     % plot the position of the GH force on the glenoid
 %     radius = sind(maxAngle);

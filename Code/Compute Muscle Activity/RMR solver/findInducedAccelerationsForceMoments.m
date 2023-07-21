@@ -1,4 +1,4 @@
-function [simulatedAccelerations, force, moment] = findInducedAccelerationsForceMomentsGH(x,params)
+function [simulatedAccelerations, force, moment] = findInducedAccelerationsForceMoments(x,params)
 % This function returns the simulated accelerations for each coordinate of
 % a Model, given the model state and the forces exerted by the Muscles (and
 % CoorindateActuators). It also returns the joint reaction force and moment 
@@ -17,13 +17,14 @@ function [simulatedAccelerations, force, moment] = findInducedAccelerationsForce
 %               force dependent from the activation level (for each muscle)
 % * PMuscForce: vector containing the muscle multipliers to find the
 %               passive muscle force (for each muscle)
-% * glen: glenohumeral joint (model.getJointSet.get('GlenoHumeral');
 % * useControls: flag to indicate whether to use .setControls (1) for the
 %                CoordinateActuators, or to overwrite their actuation with
 %                .setOverrideActuation (0). In the second case, remeber
 %                that the actuation should be overrideable!
 % * modelControls: model controls (model.getControls(state)) used if the
 %                  corresponding flag is set to 1.
+% * joint_to_constrain: joint that we want to constrain (should be already
+% a joint from the model, such as gh = model.getJointSet.get('GlenoHumeral');
 %
 % Overall, the input to the function are:
 % x: vector containing the muscle activations (for each muscle) and the
@@ -46,10 +47,9 @@ coords = params.coords;
 coordNames = params.coordNames;
 muscles = params.muscles;
 numMuscles = params.numMuscles;
-glen = params.glen;
 useMuscles = params.useMuscles;
 useControls = params.useControls;
-
+jointToConstrain = params.joint_to_constrain;
 
 % Inizialize the muscles to produce the required forces
 if useMuscles
@@ -86,6 +86,11 @@ for j = 1:length(coordNames)
     simulatedAccelerations(j) = coord.getAccelerationValue(state);
 end
 
-% get moment and force at the GlenoHumeral joint
-moment = glen.calcReactionOnParentExpressedInGround(state).get(0).getAsMat();
-force = glen.calcReactionOnParentExpressedInGround(state).get(1).getAsMat();
+if jointToConstrain
+    % get moment and force at the required joint
+    moment = jointToConstrain.calcReactionOnParentExpressedInGround(state).get(0).getAsMat();
+    force = jointToConstrain.calcReactionOnParentExpressedInGround(state).get(1).getAsMat();
+else
+    force = [];
+    moment = [];
+end
