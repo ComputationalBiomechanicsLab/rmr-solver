@@ -60,7 +60,7 @@ import org.opensim.modeling.*;
 
 %% General settings
 % if these are set to true, results are printed but the code will be slower
-print_flag = true;         
+print_flag = false;         
 withviz = false;
 
 %% Set the correct paths
@@ -317,12 +317,12 @@ tic
 
 % enter in the optimization loop
 for time_instant = 1:numTimePoints
-    if print_flag
+    % if print_flag % always print progress for demonstration purposes
         fprintf('.');
         if(mod(time_instant,80) == 0)
             fprintf('\n %i', time_instant);
         end
-    end
+    % end
 
     % set the time of the simulation to be the current one
     % (this is especially important if an external force is present, so
@@ -493,28 +493,26 @@ end
 tOptim = toc;
 
 %% Plot results
+% for TGCS 2023, always plot the activations as a conversation-started
+f1 = figure;
+title("Muscle Activations")
+muscleNames = ArrayStr();
+muscles.getNames(muscleNames);
+pgc = linspace(0, 100, size(xsol,1));
+for i = 1:numMuscles
+   subplot(5,8,i)
+   hold on
+   plot(pgc,xsol(:,i),'b-')
+   ylim([0 1])
+   muscName = muscleNames.get(i-1).toCharArray';
+   title(muscName(1:end), 'interpreter', 'none')
+   hold off
+end
+legend("muscle activation")
+f1.WindowState = 'maximized';
+
 % According to the value of the 'print_flag'
 if print_flag
-    % plot muscle activations
-    f1 = figure;
-    title("Muscle Activations")
-    muscleNames = ArrayStr();
-    muscles.getNames(muscleNames);
-    pgc = linspace(0, 100, size(xsol,1));
-    for i = 1:numMuscles
-       subplot(5,8,i)
-       hold on
-       plot(pgc,xsol(:,i),'b-')
-       ylim([0 1])
-       muscName = muscleNames.get(i-1).toCharArray';
-       title(muscName(1:end), 'interpreter', 'none')
-       hold off
-    end
-    legend("muscle activation")
-    f1.WindowState = 'maximized';
-    name_fig1 = append(experiment_name, '_MuscleActivations.png');
-    saveas(f1, name_fig1)
-    
     % Plot reserve actuator excitations.
     f2 = figure;
     title("Reserve actuators")
@@ -589,28 +587,28 @@ if print_flag
     name_fig5 = append(experiment_name, '_CumulativeAccViolation.png');
     saveas(f5, name_fig5)
 
-    % plot the position of the GH force on the glenoid
-    radius = sind(maxAngle);
-    p=nsidedpoly(1000, 'Center', [0,0], 'Radius', radius);
-    c = linspace(0,timesExp(end),length(norm_fv_rotated));
-    f6 = figure;
-    hold on
-    plot(p, 'FaceColor', 'r')
-    for time_instant=1:numTimePoints
-        scatter(-norm_fv_rotated(time_instant,3), -norm_fv_rotated(time_instant,1), [], c(time_instant), 'filled')
-    end
-    hcb = colorbar;
-    h = gca;
-    set(h, "XTickLabel", [])
-    set(h, "YTickLabel", [])
-    xlabel("back                                                                       front")   % corresponding roughly to OpenSim X axis (horizontal pointing forward)
-    ylabel("down                                                                       up")      % corresponding to OpenSim Y axis (vertical pointing upwards)
-    colorTitleHandle = get(hcb,'Title');
-    titleString = 'time [s]';
-    set(colorTitleHandle ,'String',titleString);
-    hold off
-    name_fig6 = append(experiment_name, '_CoPGH.png');
-    saveas(f6, name_fig6)
+%     % plot the position of the GH force on the glenoid
+%     radius = sind(maxAngle);
+%     p=nsidedpoly(1000, 'Center', [0,0], 'Radius', radius);
+%     c = linspace(0,timesExp(end),length(norm_fv_rotated));
+%     f6 = figure;
+%     hold on
+%     plot(p, 'FaceColor', 'r')
+%     for time_instant=1:numTimePoints
+%         scatter(-norm_fv_rotated(time_instant,3), -norm_fv_rotated(time_instant,1), [], c(time_instant), 'filled')
+%     end
+%     hcb = colorbar;
+%     h = gca;
+%     set(h, "XTickLabel", [])
+%     set(h, "YTickLabel", [])
+%     xlabel("back                                                                       front")   % corresponding roughly to OpenSim X axis (horizontal pointing forward)
+%     ylabel("down                                                                       up")      % corresponding to OpenSim Y axis (vertical pointing upwards)
+%     colorTitleHandle = get(hcb,'Title');
+%     titleString = 'time [s]';
+%     set(colorTitleHandle ,'String',titleString);
+%     hold off
+%     name_fig6 = append(experiment_name, '_CoPGH.png');
+%     saveas(f6, name_fig6)
 end
 
 %% SAVING THE RESULTS TO FILE

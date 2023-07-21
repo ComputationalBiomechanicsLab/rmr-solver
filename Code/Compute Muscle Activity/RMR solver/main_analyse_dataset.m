@@ -91,5 +91,4 @@ for trc_file_index=1:num_files
     optimizationStatus(trc_file_index).experiment = aux_optimization_status;
     result_file_RMR{trc_file_index} = aux_result_file;
     unfeasibility_flag(trc_file_index).experiment = aux_unfeasibility_flags;
-    fprintf('\n Solved with %i unfeasible solutions \n \n \n', sum(aux_unfeasibility_flags));
 end

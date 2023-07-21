@@ -61,7 +61,7 @@ import org.opensim.modeling.*;
 
 %% General settings
 % if these are set to true, results are printed but the code will be slower
-print_flag = true;         
+print_flag = false;         
 withviz = true;
 
 %% Set the correct paths

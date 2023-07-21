@@ -75,4 +75,3 @@ disp('Running RMR')
 
 [optimization_status, unfeasibility_flags, tOptim, result_file] = RMR_analysis_extForces(dataset_considered, model, 0, motion_file, [], time_interval, dynamic_bounds, enforce_GH_constraint, force_params, saving_path);
 
-fprintf('\n Solved with %i unfeasible solutions \n \n \n', sum(unfeasibility_flags));
