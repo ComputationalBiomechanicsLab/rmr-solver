@@ -77,7 +77,7 @@ addpath(path_to_repo)
 addpath(fullfile(path_to_repo, 'Code\Data Processing\'))
 
 % cd to Personal Results to have all the results saved there
-cd([path_to_repo, '\Personal_Results']);
+cd(saving_path);
 
 % create a temporary copy of the model, to be used in the function. In this
 % way, the model can be modified freely here without interfering with its
@@ -130,7 +130,7 @@ if trc_file
     
     ikTool = InverseKinematicsTool(ikSetupFile);
     ikTool.setMarkerDataFileName(trc_file);
-    ikTool.setOutputMotionFileName([path_to_repo, '\Personal_Results\', motion_file_name]);
+    ikTool.setOutputMotionFileName(fullfile(saving_path, motion_file_name));
     ikTool.set_report_marker_locations(1);
     ikTool.setStartTime(start_time);
     ikTool.setEndTime(end_time);
