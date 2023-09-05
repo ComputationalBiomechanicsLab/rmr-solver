@@ -118,18 +118,18 @@ plot(target_CMC, CMCaverage,'m','LineWidth',1.5, 'DisplayName', 'CMC')
 if path_RMR_GH
     betweenx = [target_RMR_GH,fliplr(target_RMR_GH)];
     betweeny = [RMR_GH_stdup, fliplr(RMR_GH_stdlow)];
-    h=fill(betweenx,betweeny,[0.8 1 0.8]);
+    h=fill(betweenx,betweeny,[0.8 0.8 1]);
     set(h,'EdgeColor','none', 'HandleVisibility', 'off')
-    plot(target_RMR_GH, RMR_GH_average,'g','LineWidth',1.5, 'DisplayName', 'RMR')
+    plot(target_RMR_GH, RMR_GH_average, 'Color',[0.3 0.3 1],'LineWidth',1.5, 'DisplayName', 'RMR')
 end
 
 % plotting RMR results (without GH)
 if path_RMR_noGH
     betweenx = [target_RMR_noGH,fliplr(target_RMR_noGH)];
     betweeny = [RMR_noGH_stdup, fliplr(RMR_noGH_stdlow)];
-    h=fill(betweenx,betweeny,[0.8 0.8 1]);
+    h=fill(betweenx,betweeny,[0.8 1 0.8]);
     set(h,'EdgeColor','none', 'HandleVisibility', 'off')
-    plot(target_RMR_noGH, RMR_noGH_average,'Color', [0.3 0.3 1], 'LineWidth',1.5, 'DisplayName', 'RMR (no GH)')
+    plot(target_RMR_noGH, RMR_noGH_average, 'g', 'LineWidth',1.5, 'DisplayName', 'RMR (no GH)')
 end
 
 axis([0 200 0 0.6])
