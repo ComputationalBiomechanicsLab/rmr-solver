@@ -1,0 +1,165 @@
+---
+output:
+  pdf_document:
+    toc: false
+    keep_tex: true
+    includes:
+       in_header: codecheck-preamble.sty
+    latex_engine: xelatex
+---
+
+```{r rsetup,eval=TRUE,include=FALSE}
+require("codecheck")
+require("knitr")
+require("rprojroot")
+require("yaml")
+require("xtable")
+require("tibble")
+require("readr")
+options(width = 60)
+opts_chunk$set(cache=FALSE)
+
+root = find_root("codecheck.yml")
+```
+
+```{r codecheck_logo, echo=FALSE,results='asis'}
+latex_codecheck_logo()
+```
+
+```{r manifest, eval=TRUE, include=FALSE}
+metadata = codecheck_metadata(root)
+manifest = metadata$manifest
+
+dest_dir = file.path(root, "codecheck", "outputs")
+## Create the outputs directory if missing
+if ( !dir.exists(dest_dir) ) {
+  dir.create(dest_dir)
+}
+
+manifest_df = copy_manifest_files(root, metadata,
+                                  dest_dir, keep_full_path = FALSE,
+                                  overwrite = FALSE)
+```
+
+---
+title: `r paste("CODECHECK certificate", metadata$certificate)`
+subtitle: `r codecheck:::as_latex_url(metadata$report)`
+---
+
+```{r summary_metadata, echo=FALSE, results='asis'}
+latex_summary_of_metadata(metadata)
+```
+
+```{r summary_manifest, echo=FALSE, results='asis'}
+latex_summary_of_manifest(metadata, manifest_df, root)
+```
+
+# Summary
+
+
+Source of project
+<https://github.com/ComputationalBiomechanicsLab/rmr-solver>
+
+This code was fairly straightforward to codecheck.
+[... ADD MORE INTERESTING FINDINGS HERE..]
+
+\clearpage
+
+# CODECHECKER notes
+
+```{r git_sha, echo=FALSE}
+gitInfo <- ""
+if(git2r::in_repository(root)) {
+  gitInfo <- paste0("This check is based on the commit `", git2r::last_commit()$sha, "`.")
+}
+```
+
+The GitHub repo ...
+`r gitInfo`
+Code was written in ...
+I went through the following steps ...
+One hard problem was ...
+I added the following files ... using tools/methods ...
+
+This took ... minutes to complete on {a large workstation, my laptop}.
+
+## Recommendations
+
+I suggest to the authors to consider the following suggestions for their next publication or workflow:
+
+- ...
+
+(document here if any of the suggestions were taken up by the authors in the meantime - do not remove any, keep track of contributions via feedback)
+
+\clearpage
+
+# Manifest files
+
+```{r, echo=FALSE, results="asis", width=100}
+for(i in c(1:nrow(manifest_df))) {
+  path <- manifest_df[i,"dest"]
+  if(stringr::str_ends(path, "(png|pdf|jpg|jpeg)")) {
+    # include graphics with knitr has to happen at top level in chunks, see https://github.com/yihui/knitr/issues/1260
+    # see also https://stackoverflow.com/questions/51268623/insert-images-using-knitrinclude-graphics-in-a-for-loop
+    # knitr::include_graphics(manifest_df[1, "dest"], error = TRUE)
+    # Therefore, generate Markdown code here:
+    cat("## ", basename(path), "\n\n")
+    cat("**Comment:** ", manifest_df[i,"comment"], "\n\n")
+    cat(paste0("![", "Test ", "](", path, ")\n"))
+  } else if (stringr::str_ends(path, "(Rout|txt)")) {
+    cat("## ", basename(path), "\n\n")
+    cat("\\scriptsize \n\n", "```txt\n")
+    cat(readLines(path), sep = "\n")
+    cat("\n\n``` \n\n", "\\normalsize \n\n")
+  } else if (stringr::str_ends(path, "csv")) {
+    cat("## ", basename(path), "\n\n", "Summary statistics of tabular data:", "\n\n")
+    cat("\\scriptsize \n\n", "```txt\n")
+    print(skimr::skim(read.csv(path)))
+    cat("\n\n``` \n\n", "\\normalsize \n\n")
+  } else {
+    cat("## ", basename(path), "\n\n")
+    cat("Cannot inlcude output file as figure.")
+  }
+  
+  cat("\\clearpage \n\n")
+}
+```
+
+\clearpage
+
+## Acknowledgements
+
+I would like to thank Dr Bhatt and his team for promptly answering any
+queries I had with this reproduction.  CODECHECK is financially
+supported by the Mozilla foundation.
+
+# Citing this document
+
+```{r, results='asis',echo=FALSE}
+cite_certificate(metadata)
+```
+
+# About CODECHECK
+
+This certificate confirms that the codechecker could independently
+reproduce the results of a computational analysis given the data and
+code from a third party.  A CODECHECK does not check whether the
+original computation analysis is correct.  However, as all materials
+required for the reproduction are freely available by following the
+links in this document, the reader can then study for themselves the
+code and data.
+
+
+# About this document
+
+This document was created using [R Markdown](https://rmarkdown.rstudio.com/) using the [`codecheck`](https://github.com/codecheckers/codecheck) R package.
+`make codecheck.pdf` will regenerate the report file.
+
+```{r}
+sessionInfo()
+```
+
+```{r, include=FALSE, eval=FALSE}
+# render this document in RStudio
+rmarkdown::render("codecheck.Rmd", output_format = "pdf_document") 
+```
