@@ -19,7 +19,7 @@ experiment3 = load(fullfile(path_results, (strcat('muscle_activations_Seth2019_e
 
 % load the matrix containing the relevant time instants for each of the
 % experiments
-load('Results\timings_matrix_experiments.mat')
+load('Results/timings_matrix_experiments.mat')
 
 % get the various important indexes (from the precomputed 
 if strcmpi(task, 'ABD_0kg')
