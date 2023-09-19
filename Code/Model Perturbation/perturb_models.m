@@ -23,11 +23,11 @@ cd(pathstr);
 
 % getting path to other folders in this repo
 addpath(pathstr)
-cd ..\..\
+cd(fullfile(pathstr, '..', '..'))
 
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code\Data Processing\'))
+addpath(fullfile(path_to_repo, 'Code', 'Data Processing'))
 
 %% Parameters
 % select file name of the original model
@@ -44,7 +44,7 @@ unperturbed_markers = ["Glenoid_Center", "HumHead_Center", "Glenoid_Edge"];  % w
 
 % location and name of the IK setup file used to assess validity of the 
 % perturbed models
-path_IK_setup = fullfile(path_to_repo, 'ExperimentalData/IK setup files/');
+path_IK_setup = fullfile(path_to_repo, 'ExperimentalData', 'IK setup files');
 IK_setup_file = 'IKSetup_2019.xml';
 
 % maximum value of RMSE allowable for a perturbed model to be considered valid
@@ -55,7 +55,7 @@ max_rmse_on_data = 0.01;
 % dataset of .trc files used to validate the perturbed models with IK.
 % The perturbed model will be accepted only if the average RMSE resulting
 % from IK is lower or equal to max_rmse_on_data
-trc_dataset_path = fullfile(path_to_repo, 'ExperimentalData/Markers');
+trc_dataset_path = fullfile(path_to_repo, 'ExperimentalData', 'Markers');
 
 % set a very high duration of the experiments, so we don't need to load all
 % the files to get the real value out of them (IK would work up until there

@@ -22,14 +22,14 @@ cd(pathstr);
 
 % getting path to other folders in this repo
 addpath(pathstr)
-cd ..\..\..\
+cd(fullfile(pathstr, '..', '..', '..'))
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code\Data Processing\'))
+addpath(fullfile(path_to_repo, 'Code', 'Data Processing'))
 cd(pathstr);
 
 % where to save the results of CMC analysis
-saving_path = fullfile(path_to_repo, '\Personal_Results\');
+saving_path = fullfile(path_to_repo, 'Personal_Results');
 
 % specify task names to run CMC for (can be a subset of the following)
 taskNames={'abd01';'abd02';'abd03';'flx01';'flx02';'flx03';'shrug01'; 'shrug02';'shrug03'; ...
@@ -37,8 +37,8 @@ taskNames={'abd01';'abd02';'abd03';'flx01';'flx02';'flx03';'shrug01'; 'shrug02';
 
 % load the two models, where the hand-mass and irnetia have been modified
 % The models are specific for CMC as some coordinates have been locked for this analysis.
-modelBase = Model(fullfile(path_to_repo, 'OpenSim Models/for CMC/TSM_subject_CMC_noWeight.osim'));
-model2kgBase = Model(fullfile(path_to_repo, 'OpenSim Models/for CMC/TSM_subject_CMC_2kgWeight.osim'));
+modelBase = Model(fullfile(path_to_repo, 'OpenSim Models', 'for CMC', 'TSM_subject_CMC_noWeight.osim'));
+model2kgBase = Model(fullfile(path_to_repo, 'OpenSim Models', 'for CMC', 'TSM_subject_CMC_2kgWeight.osim'));
 
 cmcBase = CMCTool('CMC_setup.xml', false);
 
@@ -77,7 +77,7 @@ for i=1:length(taskNames)
         cmc.setTaskSetFileName(tempShrugTaskFileName);
     end 
     
-    motion=[fullfile(path_to_repo, 'Results\IK solutions\',taskNames{i}),'.mot'];
+    motion=[fullfile(path_to_repo, 'Results', 'IK solutions', '',taskNames{i}),'.mot'];
     cmc.setDesiredKinematicsFileName(motion);
     cmc.setStartTime(0);
     cmc.setFinalTime(15);

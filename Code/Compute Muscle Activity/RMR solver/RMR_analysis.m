@@ -71,10 +71,10 @@ cd(pathstr);
 
 % getting path to other folders in this repo
 addpath(pathstr)
-cd ..\..\..\
+cd(fullfile(pathstr, '..', '..', '..'))
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code\Data Processing\'))
+addpath(fullfile(path_to_repo, 'Code', 'Data Processing'))
 
 % cd to Personal Results to have all the results saved there
 cd(saving_path);
@@ -125,8 +125,7 @@ if trc_file
     
     motion_file_name = append(experiment_name, '.mot');
     
-    ikSetupFile = [path_to_repo,'' ...
-            '\ExperimentalData\IK setup files\IKSetup_2019.xml'];
+    ikSetupFile = fullfile(path_to_repo,'ExperimentalData', 'IK setup files', 'IKSetup_2019.xml');
     
     ikTool = InverseKinematicsTool(ikSetupFile);
     ikTool.setMarkerDataFileName(trc_file);
@@ -635,4 +634,4 @@ frequency_solution = frequency_trc_data/time_interval;
 
 save(name_file, 'xsol', 'muscle_order', 'frequency_solution', 'optimizationStatus', 'unfeasibility_flags', 'tOptim');
 
-file_results = append(saving_path,'\', name_file, '.mat');
+file_results = fullfile(saving_path, name_file, '.mat');

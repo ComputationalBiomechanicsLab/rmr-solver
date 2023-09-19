@@ -20,7 +20,7 @@ is_GH_enforced = folder_names_cell{end};
 
 % load the matrix containing the relevant time instants for each of the
 % experiments
-load('Results\timings_matrix_experiments.mat');
+load('Results', 'timings_matrix_experiments.mat');
 
 % pre-allocate cell array to load the results from the files
 experiment = cell(num_files,1);

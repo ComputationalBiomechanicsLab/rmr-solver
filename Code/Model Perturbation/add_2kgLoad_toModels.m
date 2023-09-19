@@ -12,10 +12,10 @@ cd(pathstr);
 
 % getting path to other folders in this repo
 addpath(pathstr)
-cd ..\..\
+cd(fullfile(pathstr, '..', '..'))
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code\Data Processing\'))
+addpath(fullfile(path_to_repo, 'Code', 'Data Processing'))
 
 %% Parameters
 % where to save the results

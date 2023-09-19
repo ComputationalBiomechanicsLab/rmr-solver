@@ -10,10 +10,10 @@ mfile_name          = mfilename('fullpath');
 cd(pathstr);
 
 addpath(pathstr)
-cd '../../'
+cd(fullfile(pathstr, '..', '..'))
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code/Data Processing'))
+addpath(fullfile(path_to_repo, 'Code', 'Data Processing'))
 
 %% SETTINGS for the study
 % specifiy the file name of the states file, output of CMC
@@ -45,78 +45,91 @@ muscle_Name={'Trapezius, scapula middle';
     'Teres major'};
 
 % load the idexes corresponding to the different phases of each motion, in the CMC results 
-load(fullfile(path_to_repo, 'Results/CMC analysis/index_matrix_CMC_newStudy.mat'));
+load(fullfile(path_to_repo, 'Results', 'CMC analysis', 'index_matrix_CMC_newStudy.mat'));
 
 %% User selection phase.
 % The user selects:
+% 0. if they want to reproduce figure 3, or explore the results themselves
 % 1. the task to consider (ABD_0kg, ABD_2kg, ...)
 % 2. whether to consider the RMR results with GH constraint
 % 3. whether to consider the RMR results without GH constraint
 
-% 1. prompt user with the selction of which task to consider
-task_index = listdlg('PromptString',{'Task to consider'}, ...
+% 0. ask the user if they want to reproduce only Figure 3, or explore around 
+user_intention = listdlg('PromptString',{'I want to'}, ...
     'SelectionMode','single','ListString', ...
-    {'ABD free', 'ABD 2 kg','FLX free','FLX 2 kg', 'SHRUG free', 'SHRUG 2 kg'});
-if task_index==1
-    disp("Task considered: ABD_0kg")
-    task = 'ABD_0kg';
-    
-elseif task_index==2
-    disp("Task considered: ABD_2kg")
-    task = 'ABD_2kg';
+    {'Reproduce Fig.3 from the paper', 'Explore other results myself'});
 
-elseif task_index==3
-    disp("Task considered: FLX_0kg")
-    task = 'FLX_0kg';
-
-elseif task_index==4
-    disp("Task considered: FLX_2kg")
+if user_intention==1
+    disp("Reproducing the figure with the right settings")
     task = 'FLX_2kg';
+    path_RMR_GH = fullfile(path_to_repo, 'Results', 'RMR analysis', '100 Hz', 'with GH');
+    path_RMR_noGH = fullfile(path_to_repo, 'Results', 'RMR analysis', '100 Hz', 'without GH');
+else
 
-elseif task_index==5
-    disp("Task considered: SHRUG_0kg")
-    task = 'SHRUG_0kg';
-
-elseif task_index==6
-    disp("Task considered: SHRUG_2kg")
-    task = 'SHRUG_2kg';
-end
-
-% 2. Select which RMR solver results to consider (with GH constraint)
-answer_rmr_selection = listdlg('PromptString',{'Plot RMR analysis with GH constraint'}, ...
-    'SelectionMode','single','ListString', ...
-    {'no', '100 Hz'});
-
-if answer_rmr_selection==1
-    disp("Disregarding RMR results (with GH constraint)")
-    path_RMR_GH = 0;
+    % 1. prompt user with the selction of which task to consider
+    task_index = listdlg('PromptString',{'Task to consider'}, ...
+        'SelectionMode','single','ListString', ...
+        {'ABD free', 'ABD 2 kg','FLX free','FLX 2 kg', 'SHRUG free', 'SHRUG 2 kg'});
+    if task_index==1
+        disp("Task considered: ABD_0kg")
+        task = 'ABD_0kg';
+        
+    elseif task_index==2
+        disp("Task considered: ABD_2kg")
+        task = 'ABD_2kg';
     
-elseif answer_rmr_selection==2
-    disp("Considering RMR results at 100 Hz (with GH constraint)")
-    path_RMR_GH = fullfile(path_to_repo, '/Results/RMR analysis/100 Hz/with GH');
-end
-
-% 3. Select which RMR solver results to consider (without GH constraint)
-answer_rmr_selection = listdlg('PromptString',{'Plot RMR analysis without GH constraint'}, ...
-    'SelectionMode','single','ListString', ...
-    {'no', '100 Hz'});
-
-if answer_rmr_selection==1
-    disp("Disregarding RMR results (without GH constraint)")
-    path_RMR_noGH = 0;
+    elseif task_index==3
+        disp("Task considered: FLX_0kg")
+        task = 'FLX_0kg';
     
-elseif answer_rmr_selection==2
-    disp("Considering RMR results at 100 Hz (without GH constraint)")
-    path_RMR_noGH = fullfile(path_to_repo, '/Results/RMR analysis/100 Hz/without GH');
+    elseif task_index==4
+        disp("Task considered: FLX_2kg")
+        task = 'FLX_2kg';
+    
+    elseif task_index==5
+        disp("Task considered: SHRUG_0kg")
+        task = 'SHRUG_0kg';
+    
+    elseif task_index==6
+        disp("Task considered: SHRUG_2kg")
+        task = 'SHRUG_2kg';
+    end
+    
+    % 2. Select which RMR solver results to consider (with GH constraint)
+    answer_rmr_selection = listdlg('PromptString',{'Plot RMR analysis with GH constraint'}, ...
+        'SelectionMode','single','ListString', ...
+        {'no', 'yes'});
+    
+    if answer_rmr_selection==1
+        disp("Disregarding RMR results (with GH constraint)")
+        path_RMR_GH = 0;
+        
+    elseif answer_rmr_selection==2
+        disp("Considering RMR results at 100 Hz (with GH constraint)")
+        path_RMR_GH = fullfile(path_to_repo, 'Results', 'RMR analysis', '100 Hz', 'with GH');
+    end
+    
+    % 3. Select which RMR solver results to consider (without GH constraint)
+    answer_rmr_selection = listdlg('PromptString',{'Plot RMR analysis without GH constraint'}, ...
+        'SelectionMode','single','ListString', ...
+        {'no', 'yes'});
+    
+    if answer_rmr_selection==1
+        disp("Disregarding RMR results (without GH constraint)")
+        path_RMR_noGH = 0;
+        
+    elseif answer_rmr_selection==2
+        disp("Considering RMR results at 100 Hz (without GH constraint)")
+        path_RMR_noGH = fullfile(path_to_repo, 'Results', 'RMR analysis', '100 Hz', 'without GH');
+    end
 end
 
 disp("Considering CMC results")
 % Select the directory containing CMC results
 for i=1:18
-    Dir_file_CMC{i}=fullfile(path_to_repo, 'Results/CMC analysis/',taskNames(i),'/',fileName);
+    file_CMC{i}=fullfile(path_to_repo, 'Results', 'CMC analysis',taskNames(i),fileName);
 end
-%%file=char(Dir_file_CMC);
-file=Dir_file_CMC;
+
 format_CMC='%f';
 for i=1:86
     format_CMC=[format_CMC ' ' '%f'];
@@ -132,29 +145,29 @@ end
 % Analyze each of the 11 muscles individually
 for i=1:11
     if strcmp('ABD_0kg',task)
-        fileID=fopen(file(1,:));
+        fileID=fopen(file_CMC{1}{1});
         CMCabd01=textscan(fileID,format_CMC,'headerlines',7);
         CMCabd01=cell2mat(CMCabd01);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/abd01.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'abd01.exp'));
         EMGabd01=textscan(fileID,format_EMG,'headerlines',9);
         EMGabd01=cell2mat(EMGabd01);
         fclose(fileID);
         
-        fileID=fopen(file(2,:));
+        fileID=fopen(file_CMC{2}{1});
         CMCabd02=textscan(fileID,format_CMC,'headerlines',7);
         CMCabd02=cell2mat(CMCabd02);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/abd02.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'abd02.exp'));
         EMGabd02=textscan(fileID,format_EMG,'headerlines',9);
         EMGabd02=cell2mat(EMGabd02);
         fclose(fileID);
         
-        fileID=fopen(file(3,:));
+        fileID=fopen(file_CMC{3}{1});
         CMCabd03=textscan(fileID,format_CMC,'headerlines',7);
         CMCabd03=cell2mat(CMCabd03);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/abd03.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'abd03.exp'));
         EMGabd03=textscan(fileID,format_EMG,'headerlines',9);
         EMGabd03=cell2mat(EMGabd03);
         fclose(fileID);
@@ -185,29 +198,29 @@ for i=1:11
         fprintf('\n \n')
         
     elseif strcmp('ABD_2kg',task)
-        fileID=fopen(file(4,:));
+        fileID=fopen(file_CMC{4}{1});
         CMCabd21=textscan(fileID,format_CMC,'headerlines',7);
         CMCabd21=cell2mat(CMCabd21);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/abd21.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'abd21.exp'));
         EMGabd21=textscan(fileID,format_EMG,'headerlines',9);
         EMGabd21=cell2mat(EMGabd21);
         fclose(fileID);
         
-        fileID=fopen(file(5,:));
+        fileID=fopen(file_CMC{5}{1});
         CMCabd22=textscan(fileID,format_CMC,'headerlines',7);
         CMCabd22=cell2mat(CMCabd22);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/abd22.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'abd22.exp'));
         EMGabd22=textscan(fileID,format_EMG,'headerlines',9);
         EMGabd22=cell2mat(EMGabd22);
         fclose(fileID);
         
-        fileID=fopen(file(6,:));
+        fileID=fopen(file_CMC{6}{1});
         CMCabd23=textscan(fileID,format_CMC,'headerlines',7);
         CMCabd23=cell2mat(CMCabd23);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/abd23.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'abd23.exp'));
         EMGabd23=textscan(fileID,format_EMG,'headerlines',9);
         EMGabd23=cell2mat(EMGabd23);
         fclose(fileID);
@@ -238,28 +251,28 @@ for i=1:11
         fprintf('\n \n')
         
     elseif strcmp('FLX_0kg',task)
-        fileID=fopen(file(7,:));
+        fileID=fopen(file_CMC{7}{1});
         CMCflx01=textscan(fileID,format_CMC,'headerlines',7);
         CMCflx01=cell2mat(CMCflx01);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/flx01.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'flx01.exp'));
         EMGflx01=textscan(fileID,format_EMG,'headerlines',9);
         EMGflx01=cell2mat(EMGflx01);
         fclose(fileID);
         
-        fileID=fopen(file(8,:));
+        fileID=fopen(file_CMC{8}{1});
         CMCflx02=textscan(fileID,format_CMC,'headerlines',7);
         CMCflx02=cell2mat(CMCflx02);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/flx02.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'flx02.exp'));
         EMGflx02=textscan(fileID,format_EMG,'headerlines',9);
         EMGflx02=cell2mat(EMGflx02);
         fclose(fileID);
         
-        fileID=fopen(file(9,:));
+        fileID=fopen(file_CMC{9}{1});
         CMCflx03=textscan(fileID,format_CMC,'headerlines',7);
         CMCflx03=cell2mat(CMCflx03);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/flx03.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'flx03.exp'));
         EMGflx03=textscan(fileID,format_EMG,'headerlines',9);
         EMGflx03=cell2mat(EMGflx03);
         fclose(fileID);
@@ -290,30 +303,30 @@ for i=1:11
         fprintf('\n \n')
         
     elseif strcmp('FLX_2kg',task)
-        fileID=fopen(file{10}{1});
+        fileID=fopen(file_CMC{10}{1});
         %%fileID=fopen('/Users/stephen/live2/rmr-solver/Results/CMC analysis/flx21/ThoracoscapularShoulderCMC_states.sto');
         CMCflx21=textscan(fileID,format_CMC,'headerlines',7);
         CMCflx21=cell2mat(CMCflx21);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/flx21.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'flx21.exp'));
         EMGflx21=textscan(fileID,format_EMG,'headerlines',9);
         EMGflx21=cell2mat(EMGflx21);
         fclose(fileID);
         
-        fileID=fopen(file{11}{1});
+        fileID=fopen(file_CMC{11}{1});
         CMCflx22=textscan(fileID,format_CMC,'headerlines',7);
         CMCflx22=cell2mat(CMCflx22);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/flx22.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'flx22.exp'));
         EMGflx22=textscan(fileID,format_EMG,'headerlines',9);
         EMGflx22=cell2mat(EMGflx22);
         fclose(fileID);
         
-        fileID=fopen(file{12}{1});
+        fileID=fopen(file_CMC{12}{1});
         CMCflx23=textscan(fileID,format_CMC,'headerlines',7);
         CMCflx23=cell2mat(CMCflx23);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/flx23.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'flx23.exp'));
         EMGflx23=textscan(fileID,format_EMG,'headerlines',9);
         EMGflx23=cell2mat(EMGflx23);
         fclose(fileID);
@@ -344,29 +357,29 @@ for i=1:11
         fprintf('\n \n')
         
     elseif strcmp('SHRUG_0kg',task)
-        fileID=fopen(file{13}{1});
+        fileID=fopen(file_CMC{13}{1});
         CMCshrug01=textscan(fileID,format_CMC,'headerlines',7);
         CMCshrug01=cell2mat(CMCshrug01);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/shrug01.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'shrug01.exp'));
         EMGshrug01=textscan(fileID,format_EMG,'headerlines',9);
         EMGshrug01=cell2mat(EMGshrug01);
         fclose(fileID);
         
-        fileID=fopen(file(14,:));
+        fileID=fopen(file_CMC{14}{1});
         CMCshrug02=textscan(fileID,format_CMC,'headerlines',7);
         CMCshrug02=cell2mat(CMCshrug02);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/shrug02.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'shrug02.exp'));
         EMGshrug02=textscan(fileID,format_EMG,'headerlines',9);
         EMGshrug02=cell2mat(EMGshrug02);
         fclose(fileID);
         
-        fileID=fopen(file(15,:));
+        fileID=fopen(file_CMC{15}{1});
         CMCshrug03=textscan(fileID,format_CMC,'headerlines',7);
         CMCshrug03=cell2mat(CMCshrug03);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/shrug03.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'shrug03.exp'));
         EMGshrug03=textscan(fileID,format_EMG,'headerlines',9);
         EMGshrug03=cell2mat(EMGshrug03);
         fclose(fileID);
@@ -397,29 +410,29 @@ for i=1:11
         fprintf('\n \n')
         
     elseif strcmp('SHRUG_2kg',task)
-        fileID=fopen(file(16,:));
+        fileID=fopen(file_CMC{16}{1});
         CMCshrug21=textscan(fileID,format_CMC,'headerlines',7);
         CMCshrug21=cell2mat(CMCshrug21);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/shrug21.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'shrug21.exp'));
         EMGshrug21=textscan(fileID,format_EMG,'headerlines',9);
         EMGshrug21=cell2mat(EMGshrug21);
         fclose(fileID);
         
-        fileID=fopen(file(17,:));
+        fileID=fopen(file_CMC{17}{1});
         CMCshrug22=textscan(fileID,format_CMC,'headerlines',7);
         CMCshrug22=cell2mat(CMCshrug22);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/shrug22.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'shrug22.exp'));
         EMGshrug22=textscan(fileID,format_EMG,'headerlines',9);
         EMGshrug22=cell2mat(EMGshrug22);
         fclose(fileID);
         
-        fileID=fopen(file(18,:));
+        fileID=fopen(file_CMC{18}{1});
         CMCshrug23=textscan(fileID,format_CMC,'headerlines',7);
         CMCshrug23=cell2mat(CMCshrug23);
         fclose(fileID);
-        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData/EMG/shrug23.exp'));
+        fileID=fopen(fullfile(path_to_repo, 'ExperimentalData', 'EMG', 'shrug23.exp'));
         EMGshrug23=textscan(fileID,format_EMG,'headerlines',9);
         EMGshrug23=cell2mat(EMGshrug23);
         fclose(fileID);

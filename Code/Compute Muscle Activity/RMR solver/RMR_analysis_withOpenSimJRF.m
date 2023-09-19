@@ -77,13 +77,13 @@ root_dir = fullfile('');
 
 % getting path to other folders in this repo
 addpath(pathstr)
-cd ..\..\..\..\
+cd(fullfile(pathstr, '..', '..', '..'))
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code\Data Processing\Matlab\'))
+addpath(fullfile(path_to_repo, 'Code', 'Data Processing', 'Matlab'))
 
 % cd to Personal Results to have all the results saved there
-cd([path_to_repo, '\Personal_Results']);
+cd(saving_path);
 
 %% Getting quantities about GlenoHumeral joint
 % get the glenohumeral joint
@@ -127,12 +127,11 @@ if trc_file
     
     motion_file_name = append(experiment_name, '.mot');
     
-    ikSetupFile = [path_to_repo,'' ...
-            '\ExperimentalData\IK setup files\IKSetup_2019.xml'];
+    ikSetupFile = fullfile(path_to_repo,'ExperimentalData', 'IK setup files', 'IKSetup_2019.xml');
     
     ikTool = InverseKinematicsTool(ikSetupFile);
     ikTool.setMarkerDataFileName(trc_file);
-    ikTool.setOutputMotionFileName([path_to_repo, '\Personal_Results\', motion_file_name]);
+    ikTool.setOutputMotionFileName(fullfile(saving_path, motion_file_name));
     ikTool.set_report_marker_locations(1);
     ikTool.setStartTime(start_time);
     ikTool.setEndTime(end_time);
@@ -632,4 +631,4 @@ frequency_solution = frequency_trc_data/time_interval;
 
 save(name_file, 'xsol', 'muscle_order', 'frequency_solution');
 
-file_results = append(saving_path,'\', name_file, '.mat');
+file_results = fullfile(saving_path, name_file, '.mat');
