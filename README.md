@@ -1,4 +1,5 @@
-# RMR Solver [<img align="right" src="https://github.com/ComputationalBiomechanicsLab/rmr-solver/assets/50029203/efb31852-625c-4456-91c5-ed7fc3ac80b3" width=150>](https://zenodo.org/record/8359200)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8360269.svg)](https://doi.org/10.5281/zenodo.8360269)
+# RMR Solver  [<img align="right" src="https://github.com/ComputationalBiomechanicsLab/rmr-solver/assets/50029203/efb31852-625c-4456-91c5-ed7fc3ac80b3" width=150>](https://zenodo.org/record/8359200)
 
 ## What is it?
 
