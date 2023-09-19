@@ -126,3 +126,8 @@ Prof. Dr. Ir. Fred van Keulen, Dean of Faculty of Mechanical, Maritime and Mater
 ```
 ## Contributors
 Italo Belli, Sagar Joshi, Irene Beck
+
+## Acknowledgements
+[<img src="https://github.com/ComputationalBiomechanicsLab/rmr-solver/assets/50029203/4227ef6e-cced-4b44-a707-292aec97562c" width=130>](https://codecheck.org.uk) 
+
+We would like to thank the CodeCheck initiative for making sure that our code is reproducible! Their enthusiasm was really contagious, learn more about their great work at https://codecheck.org.uk
