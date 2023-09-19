@@ -2,7 +2,7 @@
 
 ## What is it?
 
-**RMR solver** stands for _Rapid Muscle Redundancy_ solver. It is an algorithm which solves the muscle redundancy problem, by selecting the muscles which are recruited by the human body to generate a given motion (leveraging a musculoskeletal model). The solver, tested on the dataset and model available freely at https://simtk.org/projects/thoracoscapular (Seth et al, 2019),  is presented in detail in our paper:
+**RMR solver** stands for _Rapid Muscle Redundancy_ solver. It is an algorithm which solves the muscle redundancy problem, by selecting the muscles which are recruited by the human body to generate a given motion (leveraging a musculoskeletal model). The solver is presented in detail in our paper:
 
 ```bib
 @article {Belli2023.07.11.548542,
@@ -18,7 +18,7 @@
 }
 ```
 
-To refer to the data specifically, please also cite:
+To refer specifically to the data and model we use (available freely at https://simtk.org/projects/thoracoscapular), please also cite:
 
 ```bib
 @article{seth2019muscle,
@@ -75,8 +75,8 @@ In order to use the RMR solver, you will need:
 
 - Software:
 
-    -  **MATLAB 2021b**: to run the code in this repository
-    - **OpenSim 4.3**: [Download here](https://simtk.org/frs/?group_id=91). The OpenSim team have published a setup guide [here](https://simtk-confluence.stanford.edu:8443/display/OpenSim/Scripting+with+Matlab).
+    -  **MATLAB 2021b**: to run the code in this repository (Note that the Signal Processing Toolbox is needed)
+    - **OpenSim 4.3**: [Download here](https://simtk.org/frs/?group_id=91). The OpenSim team have published a setup guide [here](https://simtk-confluence.stanford.edu:8443/display/OpenSim/Scripting+with+Matlab) that can be followed to enable MATLAB scripting.
     - **SPM1D 0.4**: Get the MATLAB version for free at https://spm1d.org/ (used for statistical analysis, not within the solver)
 
     The code in this repository has been written and tested against those versions of the software. Older/different versions might not be supported.
