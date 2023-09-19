@@ -18,6 +18,20 @@
 }
 ```
 
+To refer to the data specifically, please also cite:
+
+```bib
+@article{seth2019muscle,
+  title={Muscle contributions to upper-extremity movement and work from a musculoskeletal model of the human shoulder},
+  author={Seth, Ajay and Dong, Meilin and Matias, Ricardo and Delp, Scott},
+  journal={Frontiers in neurorobotics},
+  volume={13},
+  pages={90},
+  year={2019},
+  publisher={Frontiers Media SA}
+}
+```
+
 <table align="center">
   <tr>
     <td colspan="2" align="center">Funding Institutions</td>

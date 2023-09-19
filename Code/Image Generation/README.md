@@ -1,1 +1,1 @@
-In order to generate the plots provided in our paper, simply run `PlotResults.m` and select the tasks you want to analyse.
+In order to generate the plots provided in Figure 3 of our paper, simply run `PlotResults.m` and select the corresponding option in the pop-up menu. You can also decide to explore our results in other cases, by setting your preferences instead.
