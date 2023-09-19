@@ -10,10 +10,10 @@ mfile_name          = mfilename('fullpath');
 cd(pathstr);
 
 addpath(pathstr)
-cd '..\..\'
+cd '../../'
 path_to_repo = pwd;
 addpath(path_to_repo)
-addpath(fullfile(path_to_repo, 'Code\Data Processing'))
+addpath(fullfile(path_to_repo, 'Code/Data Processing'))
 
 %% SETTINGS for the study
 % specifiy the file name of the states file, output of CMC
@@ -93,7 +93,7 @@ if answer_rmr_selection==1
     
 elseif answer_rmr_selection==2
     disp("Considering RMR results at 100 Hz (with GH constraint)")
-    path_RMR_GH = fullfile(path_to_repo, '\Results\RMR analysis\100 Hz\with GH');
+    path_RMR_GH = fullfile(path_to_repo, '/Results/RMR analysis/100 Hz/with GH');
 end
 
 % 3. Select which RMR solver results to consider (without GH constraint)
@@ -107,16 +107,16 @@ if answer_rmr_selection==1
     
 elseif answer_rmr_selection==2
     disp("Considering RMR results at 100 Hz (without GH constraint)")
-    path_RMR_noGH = fullfile(path_to_repo, '\Results\RMR analysis\100 Hz\without GH');
+    path_RMR_noGH = fullfile(path_to_repo, '/Results/RMR analysis/100 Hz/without GH');
 end
 
 disp("Considering CMC results")
 % Select the directory containing CMC results
 for i=1:18
-    Dir_file_CMC(i)=fullfile(path_to_repo, 'Results/CMC analysis/',taskNames(i),'/',fileName);
+    Dir_file_CMC{i}=fullfile(path_to_repo, 'Results/CMC analysis/',taskNames(i),'/',fileName);
 end
-file=char(Dir_file_CMC);
-
+%%file=char(Dir_file_CMC);
+file=Dir_file_CMC;
 format_CMC='%f';
 for i=1:86
     format_CMC=[format_CMC ' ' '%f'];
@@ -290,7 +290,8 @@ for i=1:11
         fprintf('\n \n')
         
     elseif strcmp('FLX_2kg',task)
-        fileID=fopen(file(10,:));
+        fileID=fopen(file{10}{1});
+        %%fileID=fopen('/Users/stephen/live2/rmr-solver/Results/CMC analysis/flx21/ThoracoscapularShoulderCMC_states.sto');
         CMCflx21=textscan(fileID,format_CMC,'headerlines',7);
         CMCflx21=cell2mat(CMCflx21);
         fclose(fileID);
@@ -299,7 +300,7 @@ for i=1:11
         EMGflx21=cell2mat(EMGflx21);
         fclose(fileID);
         
-        fileID=fopen(file(11,:));
+        fileID=fopen(file{11}{1});
         CMCflx22=textscan(fileID,format_CMC,'headerlines',7);
         CMCflx22=cell2mat(CMCflx22);
         fclose(fileID);
@@ -308,7 +309,7 @@ for i=1:11
         EMGflx22=cell2mat(EMGflx22);
         fclose(fileID);
         
-        fileID=fopen(file(12,:));
+        fileID=fopen(file{12}{1});
         CMCflx23=textscan(fileID,format_CMC,'headerlines',7);
         CMCflx23=cell2mat(CMCflx23);
         fclose(fileID);
@@ -343,7 +344,7 @@ for i=1:11
         fprintf('\n \n')
         
     elseif strcmp('SHRUG_0kg',task)
-        fileID=fopen(file(13,:));
+        fileID=fopen(file{13}{1});
         CMCshrug01=textscan(fileID,format_CMC,'headerlines',7);
         CMCshrug01=cell2mat(CMCshrug01);
         fclose(fileID);
