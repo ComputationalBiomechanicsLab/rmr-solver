@@ -76,7 +76,7 @@ In order to use the RMR solver, you will need:
 
 - Software:
 
-    -  **MATLAB 2021b**: to run the code in this repository (Note that the Signal Processing Toolbox is needed)
+    -  **MATLAB 2021b**: to run the code in this repository (Optimization and Signal Processing Toolboxes are needed)
     - **OpenSim 4.3**: [Download here](https://simtk.org/frs/?group_id=91). The OpenSim team have published a setup guide [here](https://simtk-confluence.stanford.edu:8443/display/OpenSim/Scripting+with+Matlab) that can be followed to enable MATLAB scripting.
     - **SPM1D 0.4**: Get the MATLAB version for free at https://spm1d.org/ (used for statistical analysis, not within the solver)
 
