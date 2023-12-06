@@ -6,16 +6,15 @@
 **RMR solver** stands for _Rapid Muscle Redundancy_ solver. It is an algorithm which solves the muscle redundancy problem, by selecting the muscles which are recruited by the human body to generate a given motion (leveraging a musculoskeletal model). The solver is presented in detail in our paper:
 
 ```bib
-@article {Belli2023.07.11.548542,
-	author = {Italo Belli and Sagar Joshi and J Micah Prendergast and Irene Beck and Cosimo Della Santina and Luka Peternel and Ajay Seth},
-	title = {Does enforcing glenohumeral joint stability matter? A new rapid muscle redundancy solver highlights the importance of non-superficial shoulder muscles},
-	elocation-id = {2023.07.11.548542},
-	year = {2023},
-	doi = {10.1101/2023.07.11.548542},
-	publisher = {Cold Spring Harbor Laboratory},
-	URL = {https://www.biorxiv.org/content/early/2023/07/12/2023.07.11.548542},
-	eprint = {https://www.biorxiv.org/content/early/2023/07/12/2023.07.11.548542.full.pdf},
-	journal = {bioRxiv}
+@article{belli2023does,
+  title={Does enforcing glenohumeral joint stability matter? A new rapid muscle redundancy solver highlights the importance of non-superficial shoulder muscles},
+  author={Belli, Italo and Joshi, Sagar and Prendergast, J Micah and Beck, Irene and Della Santina, Cosimo and Peternel, Luka and Seth, Ajay},
+  journal={Plos one},
+  volume={18},
+  number={11},
+  pages={e0295003},
+  year={2023},
+  publisher={Public Library of Science San Francisco, CA USA}
 }
 ```
 
