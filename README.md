@@ -110,7 +110,7 @@ Each of the folders also have a more specific `README`.
     - `Code\Compute Muscle Activation\CMC analysis\batch_CMC_analysis.m` (by default considers the whole dataset)
 
 
-If you wish to make use of the RMR solver, you can either download the individual files the you need or (recommended) you can fork this repository into your own, and work freely there! We encourage you to try the method on your own data/model: in case you do, remember to cite our publication!
+If you wish to make use of the RMR solver, you can either download the individual files the you need or (recommended) you can fork this repository into your own, and work freely there! We encourage you to try the method on your own data/model: in case you do, please cite our publication and give us a :star:!
 
 ### Trouble-shooting
 If you encounter any troubles or issues with running the code contained in this repository, feel free to open an issue and report it. We will do our best to help you!
